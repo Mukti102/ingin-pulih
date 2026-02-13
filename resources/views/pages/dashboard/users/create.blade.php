@@ -6,7 +6,7 @@
     ]" />
 
     <div class="row">
-        <form action="{{ route('users.store') }}" class="card">
+        <form action="{{ route('users.store') }}" method="POST" class="card">
             @csrf
             <div class="card-header">
                 <h4 class="card-title">Tambah User</h4>
@@ -25,7 +25,7 @@
                 <a href="{{ route('users.index') }}" class="btn btn-md btn-danger">
                     Kembali
                 </a>
-                 <button type="submit" class="btn btn-md btn-success">
+                <button type="submit" class="btn btn-md btn-success">
                     Submit
                 </button>
             </div>

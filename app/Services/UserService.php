@@ -29,7 +29,8 @@ class UserService
                 'password' => Hash::make($data['password']),
                 'phone' => $data['phone'],
             ]);
-            $user->roles()->sync($data['role']);
+            $user->roles()->sync($data['roles']);
+
 
             return $user;
         });

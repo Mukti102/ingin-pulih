@@ -42,7 +42,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->userService->store($request->validate());
+            $this->userService->store($request->all());
             toast('Berhasil Menambahkan User', 'success');
             return redirect()->route('users.index');
         } catch (Exception $th) {
@@ -56,7 +56,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = $this->userService->find($id);
+        return view('pages.dashboard.users.show', compact('user'));
     }
 
     /**
@@ -65,7 +66,8 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = $this->userService->find($id);
-        return view('pages.dashboard.users.edit', compact('user'));
+        $roles = Role::all();
+        return view('pages.dashboard.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -75,8 +77,9 @@ class UserController extends Controller
     {
         try {
             $user = $this->userService->find($id);
-            $this->userService->update($user, $request->validate());
+            $this->userService->update($user, $request->all());
             toast('Berhasil Mengupdate User', 'success');
+            return redirect()->route('users.index');
         } catch (Exception $th) {
             toast('Gagal Mengupdate User', 'error');
             return redirect()->back();

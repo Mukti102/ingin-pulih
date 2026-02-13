@@ -35,13 +35,39 @@
                     </span>
                     <h4 class="text-section">DATA MASTER</h4>
                 </li>
-                <li class="nav-item {{ isActives(['users.*']) }}">
+                <li class="nav-item {{ isActives(['wilayah-praktik.*', 'jenis-psikolog.*','topik-keahlian.*']) }}">
                     <a data-bs-toggle="collapse" href="#base">
+                        <i class="fas fa-boxes"></i>
+                        <p>Data Master</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse {{ isShow(['wilayah-praktik.*', 'jenis-psikolog.*','topik-keahlian.*']) }}" id="base">
+                        <ul class="nav nav-collapse">
+                            <li class="{{ isActive('wilayah-praktik.*') }}">
+                                <a href="{{ route('wilayah-praktik.index') }}">
+                                    <span class="sub-item">Wilayah Praktik</span>
+                                </a>
+                            </li>
+                            <li class="{{ isActive('jenis-psikolog.*') }}">
+                                <a href="{{ route('jenis-psikolog.index') }}">
+                                    <span class="sub-item">jenis Psikolog</span>
+                                </a>
+                            </li>
+                            <li class="{{ isActive('topik-keahlian.*') }}">
+                                <a href="{{ route('topik-keahlian.index') }}">
+                                    <span class="sub-item">Topik Keahlian</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item {{ isActives(['users.*']) }}">
+                    <a data-bs-toggle="collapse" href="#base1">
                         <i class="fas fa-users"></i>
                         <p>User Management</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse {{ isShow(['users.*']) }}" id="base">
+                    <div class="collapse {{ isShow(['users.*']) }}" id="base1">
                         <ul class="nav nav-collapse">
                             <li class="{{ isActive('users.*') }}">
                                 <a href="{{ route('users.index') }}">
