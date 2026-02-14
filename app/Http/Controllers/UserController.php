@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
 use Exception;
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -39,7 +40,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         try {
             $this->userService->store($request->all());
@@ -73,7 +74,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
         try {
             $user = $this->userService->find($id);

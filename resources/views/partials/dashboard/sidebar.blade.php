@@ -35,13 +35,14 @@
                     </span>
                     <h4 class="text-section">DATA MASTER</h4>
                 </li>
-                <li class="nav-item {{ isActives(['wilayah-praktik.*', 'jenis-psikolog.*','topik-keahlian.*']) }}">
+                <li class="nav-item {{ isActives(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*']) }}">
                     <a data-bs-toggle="collapse" href="#base">
                         <i class="fas fa-boxes"></i>
                         <p>Data Master</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse {{ isShow(['wilayah-praktik.*', 'jenis-psikolog.*','topik-keahlian.*']) }}" id="base">
+                    <div class="collapse {{ isShow(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*']) }}"
+                        id="base">
                         <ul class="nav nav-collapse">
                             <li class="{{ isActive('wilayah-praktik.*') }}">
                                 <a href="{{ route('wilayah-praktik.index') }}">
@@ -61,23 +62,27 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item {{ isActives(['users.*']) }}">
+                <li class="nav-item {{ isActives(['users.*', 'psychologs.*']) }}">
                     <a data-bs-toggle="collapse" href="#base1">
                         <i class="fas fa-users"></i>
                         <p>User Management</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse {{ isShow(['users.*']) }}" id="base1">
+                    <div class="collapse {{ isShow(['users.*', 'psychologs.*']) }}" id="base1">
                         <ul class="nav nav-collapse">
                             <li class="{{ isActive('users.*') }}">
                                 <a href="{{ route('users.index') }}">
                                     <span class="sub-item">Users</span>
                                 </a>
                             </li>
+                            <li class="{{ isActive('psychologs.*') }}">
+                                <a href="{{ route('psychologs.index') }}">
+                                    <span class="sub-item">Psikolog</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
-
                 <li class="nav-item">
                     <a href="widgets.html">
                         <i class="fas fa-desktop"></i>

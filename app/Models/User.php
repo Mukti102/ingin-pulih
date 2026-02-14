@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_roles');
     }
 
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles->contains('name', $roleName);
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

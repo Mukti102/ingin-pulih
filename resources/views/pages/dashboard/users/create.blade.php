@@ -14,11 +14,24 @@
             <div class="card-body">
                 <div class="row">
                     @csrf
-                    <x-form.input name="name" label="Nama" required="true" />
-                    <x-form.input name="email" type="email" label="Email" required="true" />
-                    <x-form.input name="phone" type="number" label="No Telephone" required="false" />
-                    <x-form.input name="password" type="password" label="Password" required="true" />
-                    <x-form.checkbox-group name="roles" label="Hak Akses" :options="$roles" />
+                    <div class="mb-3 col-sm-6 col-12">
+                        <x-form.input name="name" label="Nama" required="true" />
+                    </div>
+                    <div class="mb-3 col-sm-6 col-12">
+                        <x-form.input name="email" type="email" label="Email" required="true" />
+
+                    </div>
+                    <div class="mb-3 col-sm-6 col-12">
+
+                        <x-form.input name="phone" type="number" label="No Telephone" required="false" />
+                    </div>
+                    <div class="mb-3 col-sm-6 col-12">
+                        <x-form.input name="password" type="password" label="Password" required="true" />
+
+                    </div>
+                    <div class="mb-3 col-sm-6 col-12">
+                        <x-form.checkbox-group name="roles" label="Hak Akses" :options="$roles" />
+                    </div>
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end gap-2">

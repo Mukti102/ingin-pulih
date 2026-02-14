@@ -2,8 +2,6 @@
     $error = $errors->first($name);
 @endphp
 
-<div class="mb-3 col-sm-6 col-12">
-
     @if ($label)
         <label for="{{ $name }}" class="form-label">
             {{ $label }}
@@ -24,5 +22,3 @@
             {{ $error }}
         </div>
     @endif
-
-</div>
