@@ -35,13 +35,14 @@
                     </span>
                     <h4 class="text-section">DATA MASTER</h4>
                 </li>
-                <li class="nav-item {{ isActives(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*']) }}">
+                <li
+                    class="nav-item {{ isActives(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*', 'services.*']) }}">
                     <a data-bs-toggle="collapse" href="#base">
                         <i class="fas fa-boxes"></i>
                         <p>Data Master</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse {{ isShow(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*']) }}"
+                    <div class="collapse {{ isShow(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*', 'services.*']) }}"
                         id="base">
                         <ul class="nav nav-collapse">
                             <li class="{{ isActive('wilayah-praktik.*') }}">
@@ -57,6 +58,11 @@
                             <li class="{{ isActive('topik-keahlian.*') }}">
                                 <a href="{{ route('topik-keahlian.index') }}">
                                     <span class="sub-item">Topik Keahlian</span>
+                                </a>
+                            </li>
+                            <li class="{{ isActive('services.*') }}">
+                                <a href="{{ route('services.index') }}">
+                                    <span class="sub-item">Layanan</span>
                                 </a>
                             </li>
                         </ul>
@@ -83,11 +89,41 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a href="widgets.html">
+                <li class="nav-item {{ isActives(['psycholog-services.*', 'psycholog-weekly-schedules.*']) }}">
+                    <a data-bs-toggle="collapse" href="#base3">
+                        <i class="
+fas fa-calendar-alt"></i>
+                        <p>Jadwal Praktik</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse {{ isShow(['psycholog-services.*', 'psycholog-weekly-schedules.*']) }}"
+                        id="base3">
+                        <ul class="nav nav-collapse">
+                            <li class="{{ isActive('psycholog-services.*') }}">
+                                <a href="{{ route('psycholog-services.index') }}">
+                                    <span class="sub-item">Layanan</span>
+                                </a>
+                            </li>
+                            <li class="{{ isActive('psycholog-weekly-schedules.*') }}">
+                                <a href="{{ route('psycholog-weekly-schedules.index') }}">
+                                    <span class="sub-item">Jadwal Mingguan</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item {{ isActive('bookings.*') }}">
+                    <a href="{{ route('bookings.index') }}">
                         <i class="fas fa-desktop"></i>
-                        <p>Widgets</p>
+                        <p>Daftar Booking</p>
                         <span class="badge badge-success">4</span>
+                    </a>
+                </li>
+                <li class="nav-item {{ isActive('sessions.*') }}">
+                    <a href="{{ route('sessions.index') }}">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <p>Daftar Sesi</p>
+                        {{-- <span class="badge badge-success">4</span> --}}
                     </a>
                 </li>
 

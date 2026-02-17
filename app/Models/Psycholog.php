@@ -32,4 +32,18 @@ class Psycholog extends Model
     {
         return $this->hasOne(PsychologDocument::class, 'psycholog_id');
     }
+
+    public function services()
+    {
+        return $this->hasMany(PsichologService::class, 'psycholog_id');
+    }
+
+    public function weeklySchedules()
+    {
+        return $this->hasMany(PsychologistWeeklySchedule::class);
+    }
+
+    public function booking(){
+        return $this->hasOne(Booking::class,'psycholog_id');
+    }
 }

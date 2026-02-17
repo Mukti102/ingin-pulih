@@ -60,7 +60,7 @@
                                                         @method('PUT')
 
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Edit Psikolog</h5>
+                                                            <h5 class="modal-title">Edit Jenis Psikolog</h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal"></button>
                                                         </div>
@@ -68,7 +68,7 @@
                                                         <div class="modal-body">
 
                                                             <div class="mb-3">
-                                                                <label class="form-label">Nama Psikolog</label>
+                                                                <label class="form-label">Nama Jenis Psikolog</label>
                                                                 <input type="text" name="name"
                                                                     class="form-control" value="{{ $item->name }}"
                                                                     required>
@@ -106,14 +106,14 @@
                 @csrf
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Psikolog</h5>
+                    <h5 class="modal-title">Tambah Jenis Psikolog</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label class="form-label">Nama Psikolog</label>
+                        <label class="form-label">Nama Jenis Psikolog</label>
                         <input type="text" name="name" class="form-control" required>
                     </div>
 

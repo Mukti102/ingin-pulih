@@ -34,6 +34,22 @@ class User extends Authenticatable
         return $this->roles->contains('name', $roleName);
     }
 
+    public function psycholog()
+    {
+        return $this->hasOne(Psycholog::class);
+    }
+
+
+    public function isPsycholog(): bool
+    {
+        return $this->hasRole('psycholog');
+    }
+
+    public function getPsychologOrFail()
+    {
+        return $this->psycholog()->firstOrFail();
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.

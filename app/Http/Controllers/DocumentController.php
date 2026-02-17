@@ -6,6 +6,7 @@ use App\Models\Psycholog;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentController extends Controller
 {
@@ -35,11 +36,20 @@ class DocumentController extends Controller
             $isVerified = $request->verification_status;
 
             $document->is_verified = $isVerified == 'complete' ? true : false;
+            
+            if ($document->is_verified) {
+                $document->verified_by = Auth::user()->id;
+            }
+
+
+
 
             if ($psycholog->is_verified && $document->is_verified) {
                 $psycholog->verification_status = 'complete';
                 $psycholog->save();
             }
+
+
 
             $document->note = $request->note;
             $document->save();
