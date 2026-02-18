@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\clientController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionMeetController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WilayahController;
@@ -21,12 +23,17 @@ Route::get('/', function () {
     return view('pages.guest.home');
 });
 
-Route::get('/cari-psikolog',[GuestController::class,'listPsychologs'])->name('list.psychologs');
-Route::get('/cari-psikolog/{id}',[GuestController::class,'detailPsikolog'])->name('detail.psikolog');
+Route::get('/cari-psikolog', [GuestController::class, 'listPsychologs'])->name('list.psychologs');
+Route::get('/cari-psikolog/{id}', [GuestController::class, 'detailPsikolog'])->name('detail.psikolog');
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::get('client/dashboard',[clientController::class,'index'])->name('client.dashboard');
+Route::get('client/sessions',[clientController::class,'sessions'])->name('client.sessions');
+Route::get('client/sessions/{code}',[clientController::class,'SessionShow'])->name('client.sessions.show');
 
 Route::middleware('auth')->group(function () {
     Route::resource('jenis-psikolog', TypeController::class);
@@ -51,9 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('psycholog-weekly-schedules', PsychologistWeeklyScheduleController::class);
     Route::resource('bookings', BookingController::class);
     Route::resource('sessions', SessionMeetController::class);
-    Route::patch('/room-create/{id}',[SessionMeetController::class,'createRoom'])->name('session.create.room');
-    Route::patch('/create-note/{id}',[SessionMeetController::class,'storeNote'])->name('create.note');
+    Route::patch('/room-create/{id}', [SessionMeetController::class, 'createRoom'])->name('session.create.room');
+    Route::patch('/create-note/{id}', [SessionMeetController::class, 'storeNote'])->name('create.note');
 
+    Route::get('/bookings.checkout/{code}', [TransactionController::class, 'checkoutPage'])->name('bookings.checkout');
+    Route::get('/booking/success/{code}', [TransactionController::class, 'success'])->name('booking.success');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

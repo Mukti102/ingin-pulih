@@ -6,10 +6,10 @@
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white py-3 d-flex align-items-center border-bottom-0">
                     <h5 class="card-title mb-0 fw-bold">Daftar Session</h5>
-                    <button class="btn btn-primary btn-sm ms-auto rounded-3" data-bs-toggle="modal"
+                    {{-- <button class="btn btn-primary btn-sm ms-auto rounded-3" data-bs-toggle="modal"
                         data-bs-target="#addSessionModal">
                         <i class="fa fa-plus me-1"></i> Tambah Session
-                    </button>
+                    </button> --}}
                     <!-- Add Session Modal -->
                     <div class="modal fade" id="addSessionModal" tabindex="-1">
                         <div class="modal-dialog">

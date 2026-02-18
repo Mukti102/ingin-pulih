@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Booking; // Pastikan model Booking sudah ada
 use App\Models\PsichologService;
+use App\Services\BookingService;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,13 +16,15 @@ class BoxBooking extends Component
     public $type = 'online';
     public $availableTimes = null;
     public $selectedDate = '';
+    public $selectedTopics = [];
+    public $description = '';
+    public $expectation = '';
+    public $is_followup = false;
     public $service_id;
-
     public function mount($psychologist)
     {
         $this->psychologist = $psychologist;
         // Opsional: set default selectedDate ke hari ini
-        $this->selectedDate = now()->format('Y-m-d');
     }
 
     public function semuaJadwal()
@@ -59,21 +62,26 @@ class BoxBooking extends Component
     }
 
 
-    public function store()
-    {
+    public function store(BookingService $bookingService)
+    {  
+
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        // 1. Validasi Input UI
+        $this->validate([
+            'service_id'   => 'required|exists:services,id',
+            'selectedDate' => 'required|date|after_or_equal:today',
+            'type'         => 'required|in:online,offline',
+            'description'  => 'required|string|min:5',
+            'expectation'  => 'required|string|min:5',
+            'selectedTopics'       => 'required|array|min:1',
+            'is_followup'  => 'boolean',
+        ]);
+
         try {
-
-            // 1. Validasi input
-            $this->validate([
-                'service_id' => 'required',
-                'selectedDate' => 'required|date|after_or_equal:today',
-                'type' => 'required',
-            ], [
-                'service_id.required' => 'Pilih layanan terlebih dahulu.',
-                'selectedDate.required' => 'Pilih tanggal sesi.',
-            ]);
-
-            // 2. Cek apakah psikolog tersedia di hari tersebut (Weekly Schedule)
+            // 2. Ambil Schedule & Service Detail
             $dayName = strtolower(Carbon::parse($this->selectedDate)->format('l'));
             $schedule = $this->psychologist->weeklySchedules()
                 ->where('day_of_week', $dayName)
@@ -81,55 +89,31 @@ class BoxBooking extends Component
                 ->first();
 
             if (!$schedule) {
-                return session()->flash('error', 'Psikolog tidak praktek di hari yang dipilih.');
+                session()->flash('error', 'Psikolog tidak praktek di hari yang dipilih.');
+                return;
             }
 
-            // 3. Cek apakah sudah ada booking yang confirmed di tanggal tersebut (Double Booking Check)
-            $exists = Booking::where('psycholog_id', $this->psychologist->id)
-                ->where('session_date', $this->selectedDate)
-                ->whereIn('status', ['completed','confirmed', 'pending'])
-                ->exists();
+            $pService = \App\Models\PsichologService::where('service_id',$this->service_id)->first();
 
-            if ($exists) {
-                return session()->flash('error', 'Jadwal sudah terisi, silakan pilih tanggal lain.');
-            }
-
-            // 4. Ambil detail harga dari layanan yang dipilih
-            $pService = PsichologService::find($this->service_id);
-
-            // Logic Kalkulasi
-            $platformFee = 10000; // Contoh nominal flat fee
-            $totalPrice = $pService->price + $platformFee;
-            $earning = $pService->price; // Earning murni untuk psikolog
-
-            DB::beginTransaction();
-            try {
-                $booking = Booking::create([
-                    'code' => 'BRN-' . strtoupper(Str::random(8)),
-                    'user_id' => auth()->id(), // Pastikan user sudah login
-                    'service_id' => $pService->service_id,
-                    'psycholog_id' => $this->psychologist->id,
-                    'status' => 'pending',
-                    'payment_status' => 'unpaid',
-                    'meeting_type' => $this->type,
-                    'total_price' => $totalPrice,
-                    'session_date' => $this->selectedDate,
-                    'start_time' => $schedule->start_time,
-                    'end_time' => $schedule->end_time,
-                    'platform_fee' => $platformFee,
-                    'earning' => $earning,
-                ]);
-
-                DB::commit();
-
-                return redirect()->route('bookings.checkout', $booking->code);
-            } catch (\Exception $e) {
-                DB::rollBack();
-                session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
-            }
+            $booking = $bookingService->store([
+                'psycholog_id'        => $this->psychologist->id,
+                'service_id'          => $pService->service_id,
+                'price'               => $pService->price,
+                'session_date'        => $this->selectedDate,
+                'start_time'          => $schedule->start_time,
+                'end_time'            => $schedule->end_time,
+                'meeting_type'        => $this->type,
+                'topics'              => $this->selectedTopics,
+                'is_followup'         => $this->is_followup,
+                'problem_description' => $this->description,
+                'expectations'        => $this->expectation,
+            ]);
+            return redirect()->route('bookings.checkout', $booking->code);
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatch('scroll-to-alert');
             throw $e;
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal membuat booking: ' . $e->getMessage());
         }
     }
 

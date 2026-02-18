@@ -9,6 +9,9 @@ class GuestController extends Controller
 {
     public function listPsychologs()
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
         return view('pages.guest.listPsychologs.index');
     }
 
@@ -16,6 +19,6 @@ class GuestController extends Controller
     {
         $id = decrypt($id);
         $psychologist = Psycholog::with('user', 'wilayah', 'jenisPsikolog', 'topics', 'services', 'weeklySchedules', 'booking')->find($id);
-        return view('pages.guest.listPsychologs.show',compact('psychologist'));
+        return view('pages.guest.listPsychologs.show', compact('psychologist'));
     }
 }

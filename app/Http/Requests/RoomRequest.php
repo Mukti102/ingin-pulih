@@ -23,13 +23,12 @@ class RoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'session_meet_id' => ['required', 'exists:session_meets,id'],
-            'romm_code' => ['required'],
+            'room_code' => ['required'],
             'provider' => ['required', Rule::in([
                 'zoom',
                 'google meet'
             ]),],
-            'meet_link' => ['required']
+            'meeting_link' => ['required']
         ];
     }
 }

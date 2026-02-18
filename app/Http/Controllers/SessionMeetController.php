@@ -9,6 +9,7 @@ use App\Services\BookingService;
 use App\Services\SessionMeetService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SessionMeetController extends Controller
@@ -51,6 +52,7 @@ class SessionMeetController extends Controller
             toast('Berhasil Menambahkan Sesi', 'success');
             return redirect()->route('sessions.index');
         } catch (Exception $th) {
+            Log::info('error session',['message' => $th->getMessage()]);
             toast('Gagal menambahkan sesi', 'error');
             return redirect()->back();
         }
@@ -85,8 +87,8 @@ class SessionMeetController extends Controller
         //
     }
 
-    public function createRoom(RoomRequest $request, $id)
-    {
+    public function createRoom(RoomRequest  $request, $id)
+    {    
         try {
             $this->sessionMeetService->storeRoom($request->all(), $id);
             Alert('Success', 'Berhasil Membuat Room', 'success');

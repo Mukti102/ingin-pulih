@@ -29,7 +29,8 @@
                                     </div>
                                     <div>
                                         <h6 class="mb-0 fw-bold">{{ $booking->psycholog->name }}</h6>
-                                        <p class="mb-0 small text-muted">{{$booking->psycholog->jenisPsikolog->name}}</p>
+                                        <p class="mb-0 small text-muted">{{ $booking->psycholog->jenisPsikolog->name }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -148,14 +149,14 @@
                         <p class="text-muted small">Dibuat pada {{ $booking->created_at->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
-                @if ($booking->status == 'pending')
+                @if ($booking->status == 'confirmed')
                     <div class="mt-4">
                         <small class="text-muted d-block text-center mt-2" style="font-size: 0.7rem;">
                             Apakah Anda bersedia mengammbil sesi ini.
                         </small>
                         <button type="button" class="btn btn-success w-100 rounded-3 fw-bold py-2"
                             data-bs-toggle="modal" data-bs-target="#confirmPaymentModal">
-                            <i class="fas fa-check-double me-2"></i>Konfirmasi 
+                            <i class="fas fa-check-double me-2"></i>Konfirmasi
                         </button>
 
                     </div>
@@ -168,18 +169,18 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form action="" method="POST">
+                            <form action="{{ route('sessions.store') }}" method="POST">
                                 @csrf
-                                @method('PATCH')
+                                @method('POST')
                                 <div class="modal-body px-4">
                                     <div class="text-center mb-4">
                                         <div class="bg-success bg-opacity-10 text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                                             style="width: 80px; height: 80px;">
-                                             <i class="fas fa-check-double fs-2 text-light"></i>
+                                            <i class="fas fa-check-double fs-2 text-light"></i>
                                         </div>
-                                        <p class="text-muted">Konfirmasi agar client bisa melajutkan ke pembayaran</p>
+                                        <p class="text-muted">Konfirmasi Untuk Membuat Sesi</p>
                                     </div>
-
+                                    <input type="hidden" name="booking_id" value="{{ $booking->id }}">
                                     <div class="bg-light p-3 rounded-3 mb-3">
                                         <div class="d-flex justify-content-between mb-1">
                                             <span class="small text-muted">Total Tagihan:</span>

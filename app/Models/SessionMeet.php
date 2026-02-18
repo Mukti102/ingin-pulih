@@ -18,7 +18,21 @@ class SessionMeet extends Model
         return $this->hasOne(SessionRoom::class, 'session_meet_id');
     }
 
-    public function note(){
-        return $this->hasOne(SessionNote::class,'session_meet_id');
+    public function note()
+    {
+        return $this->hasOne(SessionNote::class, 'session_meet_id');
+    }
+
+    public function show($code)
+    {
+        $user = auth()->user();
+
+        // Cari booking berdasarkan code dan pastikan milik user yang login
+        $booking = Booking::where('code', $code)
+            ->where('user_id', $user->id)
+            ->with(['psycholog', 'sessionMeet.room', 'sessionMeet.note'])
+            ->firstOrFail();
+
+        return view('pages.client.scheduleSession.show', compact('booking'));
     }
 }

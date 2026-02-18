@@ -4,11 +4,12 @@ namespace App\Services;
 
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class BookingService
 {
-    protected $platformFeeRate = 0.1; // 10% fee platform, bisa config
+    protected $platformFeeRate = 0.1;
 
     /**
      * List all bookings optionally by user
@@ -30,34 +31,46 @@ class BookingService
     public function store(array $data)
     {
         return DB::transaction(function () use ($data) {
-
-            // Validate double booking
+            // 1. Cek Double Booking (Berdasarkan waktu spesifik dari schedule)
             $exists = Booking::where('psycholog_id', $data['psycholog_id'])
                 ->where('session_date', $data['session_date'])
+                ->whereIn('status', ['confirmed', 'pending', 'completed'])
                 ->where(function ($q) use ($data) {
                     $q->whereBetween('start_time', [$data['start_time'], $data['end_time']])
-                      ->orWhereBetween('end_time', [$data['start_time'], $data['end_time']]);
+                        ->orWhereBetween('end_time', [$data['start_time'], $data['end_time']]);
                 })
                 ->exists();
 
             if ($exists) {
                 throw ValidationException::withMessages([
-                    'start_time' => 'Slot waktu sudah dibooking.'
+                    'selectedDate' => 'Jadwal pada jam tersebut sudah terisi.'
                 ]);
             }
 
-            // Hitung platform fee & earning
-            $totalPrice = $data['total_price'] ?? 0;
-            $platformFee = $totalPrice * $this->platformFeeRate;
-            $earning = $totalPrice - $platformFee;
+            $servicePrice = $data['price'];
+            $platformFee  = $servicePrice * $this->platformFeeRate;
+            $totalPrice   = $servicePrice + $platformFee;          
+            $earning      = $servicePrice;
 
-            $data['platform_fee'] = $platformFee;
-            $data['earning'] = $earning;
-
-            // Auto generate booking code
-            $data['code'] = $this->generateCode();
-
-            return Booking::create($data);
+            return Booking::create([
+                'code'                => 'BRN-' . strtoupper(Str::random(8)),
+                'user_id'             => auth()->id(),
+                'service_id'          => $data['service_id'], // service_id murni dari PsichologService
+                'psycholog_id'        => $data['psycholog_id'],
+                'status'              => 'pending',
+                'payment_status'      => 'unpaid',
+                'meeting_type'        => $data['meeting_type'],
+                'topics'              => $data['topics'],
+                'is_followup'         => $data['is_followup'],
+                'problem_description' => $data['problem_description'],
+                'expectations'        => $data['expectations'],
+                'total_price'         => $totalPrice,
+                'session_date'        => $data['session_date'],
+                'start_time'          => $data['start_time'],
+                'end_time'            => $data['end_time'],
+                'platform_fee'        => $platformFee,
+                'earning'             => $earning,
+            ]);
         });
     }
 

@@ -6,6 +6,8 @@
          </div>
      @endif
 
+
+
      <h2 class="text-xl font-bold mb-6">Atur Jadwal Sesi</h2>
 
      <div class="space-y-6">
@@ -41,8 +43,8 @@
                  @forelse($filteredServices as $pService)
                      <label class="relative group cursor-pointer" wire:key="p-service-{{ $pService->id }}">
                          <input wire:model.live="service_id" type="radio"
-                             wire:click="$set('service_id', {{ $pService->id }})" name="psicholog_service_id"
-                             value="{{ $pService->id }}" class="peer sr-only" required>
+                             wire:click="$set('service_id', {{ $pService->service_id }})" name="psicholog_service_id"
+                             value="{{ $pService->service_id }}" class="peer sr-only" required>
 
                          <div
                              class="p-5 bg-brand-800/40 border-2 border-brand-700/50 rounded-[1.5rem] peer-checked:border-orange-500 peer-checked:bg-brand-800 transition-all duration-300">
@@ -163,6 +165,56 @@
                  {{ \Carbon\Carbon::parse($selectedDate)->locale('id')->translatedFormat('l') }}.</p>
          </div>
      @endif
+
+     <div class="mt-5 space-y-6">
+
+         {{-- Checkbox Topik --}}
+         <div class="space-y-3 ">
+             <label class="text-sm font-bold text-brand-300 block">Pilih topik permasalahan</label>
+             <div class="grid grid-cols-2 gap-3">
+                 @foreach ($psychologist->topics as $topic)
+                     <label
+                         class="flex items-center gap-3 p-3 bg-brand-800/50 border border-brand-700 rounded-xl cursor-pointer hover:bg-brand-800 transition-all">
+                         <input type="checkbox" wire:model.live="selectedTopics" value="{{ $topic->id }}"
+                             class="w-5 h-5 accent-orange-500 rounded">
+                         <span class="text-sm">{{ $topic->name }}</span>
+                     </label>
+                 @endforeach
+             </div>
+             @error('selectedTopics')
+                 <span class="text-red-500 text-xs font-bold">{{ $message }}</span>
+             @enderror
+         </div>
+
+         {{-- Deskripsi Masalah --}}
+         <div class="space-y-2">
+             <label class="text-sm font-bold text-brand-300">Deskripsi Masalah</label>
+             <textarea wire:model="description" rows="4"
+                 class="w-full bg-brand-800 border-2 {{ $errors->has('description') ? 'border-red-500' : 'border-brand-700' }} rounded-2xl p-4 focus:border-orange-500 outline-none transition-all"
+                 placeholder="Ceritakan sedikit masalahmu..."></textarea>
+             @error('description')
+                 <span class="text-red-500 text-xs font-bold">{{ $message }}</span>
+             @enderror
+             <div class="flex items-center gap-3 mt-4 p-3  rounded-lg">
+                 <input type="checkbox" wire:model.live="is_followup" id="is_followup" name="is_followup"
+                     class="w-5 h-5 text-primary border-slate-300 rounded focus:ring-primary cursor-pointer">
+                 <label for="is_followup" class="text-sm font-medium text-slate-200 cursor-pointer">
+                     Saya Merupakan Client Lanjutan?
+                 </label>
+             </div>
+         </div>
+
+         <div class="space-y-2">
+             <label class="text-sm font-bold text-brand-300">Harapan setelah konseling</label>
+             <textarea wire:model="expectation" rows="3"
+                 class="w-full bg-brand-800 border-2 {{ $errors->has('expectation') ? 'border-red-500' : 'border-brand-700' }} rounded-2xl p-4 focus:border-orange-500 outline-none transition-all"
+                 placeholder="Apa yang ingin kamu capai?"></textarea>
+             @error('expectation')
+                 <span class="text-red-500 text-xs font-bold">{{ $message }}</span>
+             @enderror
+         </div>
+     </div>
+
      <div>
          @if ($errors->any())
              <div class="my-4 p-4 bg-red-500/20 border border-red-500 text-red-200 rounded-2xl text-sm">
@@ -176,8 +228,6 @@
      </div>
      <button wire:click="store" wire:loading.attr="disabled"
          class="w-full my-5 py-4 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white rounded-2xl font-black shadow-lg shadow-orange-900/20 transition-all uppercase tracking-widest flex justify-center items-center gap-2">
-
-         {{-- Loading State --}}
          <span wire:loading wire:target="store"
              class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full"></span>
 

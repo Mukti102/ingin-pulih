@@ -64,6 +64,7 @@ class SessionMeetService
             DB::commit();
             return $session;
         } catch (\Exception $e) {
+            Log::info('error store room',['message' => $e->getMessage()]);
             Log::error('Error storing room:', ['message' => $e->getMessage(), 'session_id' => $id]);
             DB::rollBack();
             throw $e;
