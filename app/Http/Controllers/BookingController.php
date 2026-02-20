@@ -40,8 +40,7 @@ class BookingController extends Controller
      */
     public function create()
     {
-        $users = User::all();
-        // Ambil data psikolog dari user yang login beserta relasi jadwalnya
+        $users = User::withRole('user')->get();
         $psycholog = auth()->user()->psycholog->load('weeklySchedules');
         $services = $psycholog->services;
 
@@ -51,7 +50,7 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookingRequest $request)
     {
         try {
             $this->bookingService->store($request->all());
@@ -69,8 +68,9 @@ class BookingController extends Controller
      */
     public function show($id)
     {
-        $booking = Booking::find(decrypt($id));
-        return view('pages.dashboard.psycholog.booking.show', compact('booking'));
+        $booking = Booking::with('user', 'psycholog', 'service')->find(decrypt($id));
+        $topicNames = \App\Models\Topic::whereIn('id', (array)$booking->topics)->pluck('name');
+        return view('pages.dashboard.psycholog.booking.show', compact('booking', 'topicNames'));
     }
 
     /**
@@ -79,7 +79,8 @@ class BookingController extends Controller
     public function edit($id)
     {
         $booking = Booking::find(decrypt($id));
-        $users = User::all();
+        $users = User::withRole('user')->get();
+
         // Ambil data psikolog dari user yang login beserta relasi jadwalnya
         $psycholog = auth()->user()->psycholog->load('weeklySchedules');
         $services = $psycholog->services;
@@ -90,9 +91,17 @@ class BookingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Booking $booking)
+    public function update(BookingRequest $request, Booking $booking)
     {
-        //
+        try {
+            $this->bookingService->update($booking, $request->all());
+            toast('Berhasil Memperbarui Booking', 'success');
+            return redirect()->route('bookings.index');
+        } catch (Exception $e) {
+            Log::info('error', ['message' => $e->getMessage()]);
+            Alert('Error', $e->getMessage() . ' ' . 'Pilih Tanggal Lain', 'error');
+            return redirect()->back();
+        }
     }
 
     /**

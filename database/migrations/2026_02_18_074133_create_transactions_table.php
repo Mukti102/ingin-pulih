@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
 
             // Log teknis (Opsional tapi berguna untuk debug)
-            $table->json('payload_notification')->nullable(); // Simpan mentah data dari Midtrans
+            $table->json('payload_notification')->nullable();
 
             $table->timestamps();
         });

@@ -24,10 +24,10 @@ class clientController extends Controller
             ->take(5)
             ->get();
 
-        $unpaidBookings = Booking::where('user_id', $user->id)->where('payment_status', 'pending')->latest()->get();
+        $unpaidBookings = Booking::where('user_id', $user->id)->where('payment_status', 'unpaid')->latest()->get();
 
 
-        return view('pages.client.dashboard', compact('upcomingBooking', 'recentBookings','unpaidBookings'));
+        return view('pages.client.dashboard', compact('upcomingBooking', 'recentBookings', 'unpaidBookings'));
     }
 
     public function SessionShow($code)
@@ -45,6 +45,19 @@ class clientController extends Controller
         return view('pages.client.scheduleSession.show', compact('booking', 'topicNames'));
     }
 
+    public function history()
+    {
+        $user = auth()->user();
+
+        $historySessions = Booking::where('user_id', $user->id)
+            ->whereIn('status', ['completed', 'cancelled', 'expired', 'pending'])
+            ->with('psycholog')
+            ->latest()
+            ->paginate(10);
+
+        return view('pages.client.history.index', compact('historySessions'));
+    }
+
     public function sessions()
     {
         $user = auth()->user();
@@ -57,13 +70,8 @@ class clientController extends Controller
             ->orderBy('session_date', 'asc')
             ->get();
 
-        // Sesi yang sudah selesai atau dibatalkan
-        $historySessions = Booking::where('user_id', $user->id)
-            ->whereIn('status', ['completed', 'cancelled', 'expired', 'pending'])
-            ->with('psycholog')
-            ->latest()
-            ->paginate(10);
 
-        return view('pages.client.scheduleSession.index', compact('upcomingSessions', 'historySessions'));
+
+        return view('pages.client.scheduleSession.index', compact('upcomingSessions'));
     }
 }

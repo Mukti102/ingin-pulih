@@ -16,9 +16,15 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        if (auth()->user()->hasRole('admin','psycholog')) {
+            return view('pages.dashboard.auth.profile', [
+                'user' => $request->user(),
+            ]);
+        }else{
+            return view('pages.client.auth.profile', [
+                'user' => $request->user(),
+            ]);
+        }
     }
 
     /**
@@ -27,12 +33,19 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
+        
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $request->user()->avatar = $avatarPath;
+        }
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+
+        toast()->success('Profile updated successfully');
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

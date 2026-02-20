@@ -47,7 +47,6 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <span class="text-muted">Rate Komisi:</span>
-                        <span class="fw-bold text-primary">{{ $psycholog->commision_rate }}%</span>
                     </div>
                 </div>
             </div>

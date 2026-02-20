@@ -10,6 +10,7 @@
             <div class="col-lg-8">
                 <div class="d-lg-none mb-3">
                     <x-booking-status-badge :status="$booking->status" />
+
                 </div>
 
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -23,7 +24,7 @@
                             <div class="col-md-6">
                                 <label class="small text-muted text-uppercase fw-bold mb-2 d-block">Psikolog</label>
                                 <div class="d-flex align-items-center p-3 bg-light rounded-3">
-                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                    <div class="bg-primary text-black rounded-circle d-flex align-items-center justify-content-center me-3"
                                         style="width: 45px; height: 45px;">
                                         <i class="fas fa-user-md"></i>
                                     </div>
@@ -39,7 +40,7 @@
                                 <label class="small text-muted text-uppercase fw-bold mb-2 d-block">Pasien /
                                     Klien</label>
                                 <div class="d-flex align-items-center p-3 bg-light rounded-3">
-                                    <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                    <div class="bg-info text-black rounded-circle d-flex align-items-center justify-content-center me-3"
                                         style="width: 45px; height: 45px;">
                                         <i class="fas fa-user"></i>
                                     </div>
@@ -104,6 +105,102 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="mt-4 border border-light border-opacity-10 rounded-4 overflow-hidden"
+                                    style="background: rgba(255, 255, 255, 0.03);">
+
+                                    {{-- Header Form --}}
+                                    <div
+                                        class="px-4 py-3 border-bottom border-light border-opacity-10 bg-white bg-opacity-5 d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0 text-black fw-bold small">
+                                            <i class="fas fa-file-alt me-2 text-info"></i>DETAIL INFORMASI KLIEN
+                                        </h6>
+                                        @if ($booking->is_followup)
+                                            <span class="badge bg-info text-light rounded-pill"
+                                                style="font-size: 0.6rem;">SESI LANJUTAN</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="p-4">
+                                        <div class="row g-4">
+                                            <div class="col-12">
+                                                <label class="text-black small fw-bolder  tracking-widest d-block mb-2"
+                                                    style="font-size: 0.4rem; opacity: 0.7;">
+                                                    <i class="fas fa-tags me-1"></i> Topik Utama Masalah
+                                                </label>
+
+                                                <div class="gap-2 justify-content-start align-items-start">
+                                                    @if ($topicNames && count($booking->topics) > 0)
+                                                        @foreach ($topicNames as $topic)
+                                                            <span
+                                                                class="badge rounded-pill bg-warning text-dark px-3 py-2 border border-warning border-opacity-25"
+                                                                style="font-size: 0.7rem; font-weight: 600;">
+                                                                {{ $topic }}
+                                                            </span>
+                                                        @endforeach
+                                                    @else
+                                                        <div
+                                                            class="py-2 px-3 rounded-3 bg-light border border-dashed text-muted small">
+                                                            <i class="fas fa-info-circle me-1"></i> Tidak ada topik
+                                                            spesifik dipilih
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+
+                                            {{-- Field: Deskripsi (Grid 6) --}}
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label
+                                                        class="text-black small fw-bolder  tracking-widest d-flex align-items-center mb-2"
+                                                        style="font-size: 0.6rem;">
+                                                        <span class="bg-info rounded-circle me-2"
+                                                            style="width: 6px; height: 6px;"></span>
+                                                        Deskripsi Keluhan
+                                                    </label>
+                                                    <div class="p-3 rounded-3 border border-light border-opacity-10 min-vh-10"
+                                                        style="background: rgba(0,0,0,0.2); text-align: justify;">
+                                                        <p class="text-black small mb-0 lh-base opacity-90">
+                                                            {{ $booking->problem_description ?? 'N/A' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- Field: Harapan (Grid 6) --}}
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label
+                                                        class="text-black small fw-bolder  tracking-widest d-flex align-items-center mb-2"
+                                                        style="font-size: 0.6rem;">
+                                                        <span class="bg-warning rounded-circle me-2"
+                                                            style="width: 6px; height: 6px;"></span>
+                                                        Harapan Klien
+                                                    </label>
+                                                    <div class="p-3 rounded-3 border border-light border-opacity-10 min-vh-10"
+                                                        style="background: rgba(0,0,0,0.2); text-align: justify;">
+                                                        <p class="text-black small mb-0 lh-base opacity-90">
+                                                            {{ $booking->expectations ?? 'N/A' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- Footer Info --}}
+                                            <div class="col-12 mt-3">
+                                                <div class="d-flex align-items-center opacity-50">
+                                                    <i class="fas fa-info-circle text-black me-2 small"></i>
+                                                    <span class="text-black small" style="font-size: 0.7rem;">
+                                                        Informasi ini bersifat rahasia dan hanya digunakan untuk
+                                                        keperluan medis/konseling.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +210,7 @@
                         <i class="fas fa-arrow-left me-2"></i>Kembali
                     </a>
                     @if ($booking->status == 'pending')
-                        <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-primary px-4 rounded-3">
+                        <a href="{{ route('bookings.edit', encrypt($booking->id)) }}" class="btn btn-primary px-4 rounded-3">
                             <i class="fas fa-edit me-2"></i>Edit Data
                         </a>
                     @endif
@@ -215,7 +312,7 @@
                                 {{ number_format($booking->total_price, 0, ',', '.') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span class="text-muted">Biaya Platform (10%)</span>
+                            <span class="text-muted">Biaya Platform ({{ get_setting('default_fee') }}%)</span>
                             <span class="text-danger">- Rp
                                 {{ number_format($booking->platform_fee, 0, ',', '.') }}</span>
                         </div>

@@ -9,8 +9,13 @@
         <div class="col-md-4">
             <div class="card shadow-sm text-center">
                 <div class="card-body">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=random"
-                        class="rounded-circle mb-3" width="100" alt="Avatar">
+                    @if ($user->avatar)
+                        <img src="{{ asset('storage/' . $user->avatar) }}" class="rounded-circle mb-3"
+                            style="object-fit: cover" height="100" width="100" alt="Avatar">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=random"
+                            class="rounded-circle mb-3" width="100" alt="Avatar">
+                    @endif
                     <h5 class="mb-1">{{ $user->name }}</h5>
                     <p class="text-muted small">{{ $user->email }}</p>
 
@@ -43,6 +48,14 @@
                         <tr>
                             <th>Nomor Telepon</th>
                             <td>: {{ $user->phone ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Lahir</th>
+                            <td>: {{ $user->date_of_birth ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th width="30%">Alamat Lengkap</th>
+                            <td>: {{ $user->address ?? '-' }}</td>
                         </tr>
                         <tr>
                             <th>Roles / Hak Akses</th>

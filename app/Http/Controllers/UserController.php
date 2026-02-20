@@ -75,7 +75,7 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UserRequest $request, string $id)
-    {
+    {   
         try {
             $user = $this->userService->find($id);
             $this->userService->update($user, $request->all());

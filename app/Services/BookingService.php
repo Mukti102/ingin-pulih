@@ -9,7 +9,14 @@ use Illuminate\Validation\ValidationException;
 
 class BookingService
 {
-    protected $platformFeeRate = 0.1;
+    protected $platformFeeRate = 0;
+
+
+    public function __construct()
+    {
+        $fee = (float) get_setting('default_fee', 10); // default 10%
+        $this->platformFeeRate = $fee / 100;
+    }
 
     /**
      * List all bookings optionally by user
@@ -31,13 +38,13 @@ class BookingService
     public function store(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // 1. Cek Double Booking (Berdasarkan waktu spesifik dari schedule)
+            // 1. Cek duplikasi jadwal (sudah benar)
             $exists = Booking::where('psycholog_id', $data['psycholog_id'])
                 ->where('session_date', $data['session_date'])
-                ->whereIn('status', ['confirmed', 'pending', 'completed'])
+                ->whereIn('status', ['confirmed', 'pending', 'complete'])
                 ->where(function ($q) use ($data) {
-                    $q->whereBetween('start_time', [$data['start_time'], $data['end_time']])
-                        ->orWhereBetween('end_time', [$data['start_time'], $data['end_time']]);
+                    $q->where('start_time', '<', $data['end_time'])
+                        ->where('end_time', '>', $data['start_time']);
                 })
                 ->exists();
 
@@ -49,13 +56,16 @@ class BookingService
 
             $servicePrice = $data['price'];
             $platformFee  = $servicePrice * $this->platformFeeRate;
-            $totalPrice   = $servicePrice + $platformFee;          
+            $totalPrice   = $servicePrice + $platformFee;
             $earning      = $servicePrice;
 
-            return Booking::create([
-                'code'                => 'BRN-' . strtoupper(Str::random(8)),
+            $bookingCode = 'BRN-' . strtoupper(Str::random(8));
+
+            // 2. Create Booking
+            $booking = Booking::create([
+                'code'                => $bookingCode,
                 'user_id'             => auth()->id(),
-                'service_id'          => $data['service_id'], // service_id murni dari PsichologService
+                'service_id'          => $data['service_id'],
                 'psycholog_id'        => $data['psycholog_id'],
                 'status'              => 'pending',
                 'payment_status'      => 'unpaid',
@@ -71,6 +81,18 @@ class BookingService
                 'platform_fee'        => $platformFee,
                 'earning'             => $earning,
             ]);
+
+            // 3. Create Transaction (Data ini yang akan dibaca oleh Callback Midtrans)
+            Transaction::create([
+                'user_id'      => auth()->id(),
+                'booking_id'   => $booking->id,
+                'reference_id' => $bookingCode, // Ini yang jadi order_id di Midtrans
+                'amount'       => $totalPrice,
+                'status'       => 'pending',
+                'type'         => 'payment', // opsional: jika Anda punya fitur topup/payout
+            ]);
+
+            return $booking;
         });
     }
 

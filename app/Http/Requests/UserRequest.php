@@ -33,6 +33,10 @@ class UserRequest extends FormRequest
             'is_active' => 'nullable',
             'roles' => 'required|array',
             'roles.*' => 'exists:roles,id',
+            'date_of_birth' => ['nullable', 'date'],
+            'gender' => ['nullable', 'string', 'in:laki-laki,perempuan,lainya'],
+            'address' => ['nullable', 'string'],
+            'avatar' => ['nullable', 'max:2048'],
         ];
     }
 }

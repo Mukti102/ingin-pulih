@@ -53,12 +53,16 @@ class SessionMeetService
                     'room_code'    => $data['room_code'],
                     'meeting_link' => $data['meeting_link'],
                 ]);
+                $session->status = 'active';
+                $session->save();
             } else {
                 $session->room()->create([
                     'provider'     => $data['provider'],
                     'room_code'    => $data['room_code'],
                     'meeting_link' => $data['meeting_link'],
                 ]);
+                $session->status = 'active';
+                $session->save();
             }
 
             DB::commit();

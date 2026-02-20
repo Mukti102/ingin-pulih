@@ -25,6 +25,14 @@ class PsychologController extends Controller
         $this->psychologService = $psychologService;
     }
 
+    public function register()
+    {
+        $wilayahs = Wilayah::all();
+        $types = Type::all();
+        $topics = Topic::all();
+        return view('pages.client.auth.register-psychologist', compact('wilayahs', 'types', 'topics'));
+    }
+
     public function index(Request $request)
     {
         // Mengambil data psikolog yang sudah difilter melalui service
@@ -58,8 +66,8 @@ class PsychologController extends Controller
     {
         try {
             $this->psychologService->store($request->all());
-            toast('Berhasil Menambahkan Psycholog', 'success');
-            return redirect()->route('psychologs.index');
+            toast('Berhasil Di Buat dan dikirim', 'success');
+            return redirect()->back();
         } catch (Exception $th) {
             Log::info('Gagal', ['message' => $th->getMessage()]);
             toast('Gagal Menambhakan Psycholog', 'error');

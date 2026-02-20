@@ -37,4 +37,19 @@ class Booking extends Model
     {
         return $this->hasOne(Transaction::class, 'booking_id');
     }
+
+
+    // app/Models/Booking.php
+
+    public function getStatusColor(): string
+    {
+        return match ($this->status) {
+            'pending'   => 'bg-amber-100 text-amber-600',
+            'confirmed' => 'bg-cyan-100 text-cyan-600',
+            'complete'  => 'bg-emerald-100 text-emerald-600',
+            'failed'    => 'bg-red-100 text-red-600',
+            'cancelled' => 'bg-gray-100 text-gray-600',
+            default     => 'bg-gray-100 text-gray-400',
+        };
+    }
 }

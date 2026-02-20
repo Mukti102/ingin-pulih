@@ -8,10 +8,10 @@
     <div class="container-fluid pb-5">
         <div class="row">
             <div class="col-lg-8">
-                @if ($session->session_status == 'active')
+                @if ($session->status == 'pending')
                     <div class="alert alert-primary border-0 shadow-sm rounded-4 d-flex align-items-center mb-4"
                         role="alert">
-                        <div class="spinner-grow spinner-grow-sm text-primary me-3" role="status"></div>
+                        <div class="spinner-grow spinner-grow-sm text-success me-3" role="status"></div>
                         <div>
                             <strong class="d-block">Sesi sedang berlangsung</strong>
                             <small>Pastikan Anda mencatat poin-poin penting dalam sesi ini.</small>

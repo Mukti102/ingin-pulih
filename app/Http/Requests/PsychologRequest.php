@@ -35,12 +35,11 @@ class PsychologRequest extends FormRequest
             'STR' => ['nullable', 'string', 'max:255'],
 
             'experience_years' => ['required', 'integer', 'min:0'],
-            'commision_rate' => ['required', 'integer', 'min:0', 'max:100'],
 
             'is_verified' => ['nullable', 'boolean'],
 
             'verification_status' => [
-                'required',
+                'nullable',
                 Rule::in(['pending', 'failed', 'complete'])
             ],
 

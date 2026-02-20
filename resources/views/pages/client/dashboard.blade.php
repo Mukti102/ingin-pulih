@@ -64,7 +64,7 @@
                             </div>
                             <div class="text-right">
                                 <span
-                                    class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $item->status == 'completed' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600' }}">
+                                    class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $item->getStatusColor() }}">
                                     {{ $item->status }}
                                 </span>
                             </div>

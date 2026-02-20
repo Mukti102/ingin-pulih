@@ -1,10 +1,15 @@
 <!-- Sidebar -->
-<div class="sidebar" data-background-color="dark">
+<div class="sidebar" data-background-color="dark2">
     <div class="sidebar-logo">
         <!-- Logo Header -->
-        <div class="logo-header" data-background-color="dark">
+        <div class="logo-header" data-background-color="dark2">
             <a href="index.html" class="logo">
-                <img src="/assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
+                @if (get_setting('app_logo'))
+                    <img src="{{ Storage::url(get_setting('app_logo')) }}" alt="Logo"
+                        class="navbar-brand" height="60">
+                @else
+                    <img src="/assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20" />
+                @endif
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -29,11 +34,16 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                <li class="nav-item {{ isactive('dashboard.psycholog') }}">
+                    <a href="{{ route('dashboard.psycholog') }}">
+                        <i class="fas fa-home"></i>
+                        <p>Dashboard Psikolog</p>
+                    </a>
+                </li>
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
-                    <h4 class="text-section">DATA MASTER</h4>
                 </li>
                 <li
                     class="nav-item {{ isActives(['wilayah-praktik.*', 'jenis-psikolog.*', 'topik-keahlian.*', 'services.*']) }}">
@@ -116,17 +126,33 @@ fas fa-calendar-alt"></i>
                     <a href="{{ route('bookings.index') }}">
                         <i class="fas fa-desktop"></i>
                         <p>Daftar Booking</p>
-                        <span class="badge badge-success">4</span>
+                        {{-- <span class="badge badge-success">4</span> --}}
                     </a>
                 </li>
                 <li class="nav-item {{ isActive('sessions.*') }}">
                     <a href="{{ route('sessions.index') }}">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <p>Daftar Sesi</p>
-                        {{-- <span class="badge badge-success">4</span> --}}
                     </a>
                 </li>
-
+                <li class="nav-item {{ isActive('transactions.*') }}">
+                    <a href="{{ route('transactions.index') }}">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <p>Daftar Transaksi</p>
+                    </a>
+                </li>
+                <li class="nav-item {{ isActive('profile.*') }}">
+                    <a href="{{ route('profile.edit') }}">
+                        <i class="fas fa-user"></i>
+                        <p>Profile</p>
+                    </a>
+                </li>
+                <li class="nav-item {{ isActive('admin.settings.*') }}">
+                    <a href="{{ route('admin.settings.index') }}">
+                        <i class="fas fa-cog"></i>
+                        <p>Pengaturan</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

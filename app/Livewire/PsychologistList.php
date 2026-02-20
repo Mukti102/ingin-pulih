@@ -27,7 +27,7 @@ class PsychologistList extends Component
     public function render()
     {
         // Menggunakan eager loading (with) agar tidak terkena masalah N+1 Query
-        $psychologists = \App\Models\Psycholog::with(['user', 'jenisPsikolog', 'topics'])
+        $psychologists = \App\Models\Psycholog::with(['user', 'jenisPsikolog', 'topics','weeklySchedules'])
             ->when($this->search, function ($query) {
                 $query->where('fullname', 'like', '%' . $this->search . '%')->orWhere('about', 'like', '%' . $this->search . '%')->orWhereHas('topics', function ($subQ) {
                     $subQ->where('name', 'like', '%' . $this->search . '%');

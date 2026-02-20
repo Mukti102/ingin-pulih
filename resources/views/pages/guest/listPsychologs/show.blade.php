@@ -7,8 +7,13 @@
                 <div class="sticky top-24 space-y-6">
                     <div class="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm text-center">
                         <div class="relative inline-block mb-6">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($psychologist->fullname) }}&size=200"
-                                class="w-40 h-40 rounded-[2.5rem] object-cover border-4 border-white shadow-md">
+                            @if ($psychologist->user->avatar)
+                                <img src="{{ Storage::url($psychologist->user->avatar) }}" alt="Avatar"
+                                    class="w-40 h-40 rounded-[2.5rem] object-cover border-4 border-white shadow-md">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($psychologist->fullname) }}&size=200"
+                                    class="w-40 h-40 rounded-[2.5rem] object-cover border-4 border-white shadow-md">
+                            @endif
                             <div
                                 class="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white">
                             </div>

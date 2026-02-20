@@ -9,11 +9,17 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <div class="bg-white rounded-[1rem] p-8 border border-slate-100 shadow-sm">
                     <div class="flex flex-wrap justify-between items-start gap-4 mb-8">
                         <div class="flex items-center gap-4">
-                            <img src="https://ui-avatars.com/api/?name={{ $booking->psycholog->fullname }}&background=random"
-                                class="w-16 h-16 rounded-2xl shadow-sm" alt="">
+                            @if ($booking->psycholog->user->avatar)
+                                <img src="{{ Storage::url($booking->psycholog->user->avatar) }}" alt="Avatar"
+                                    class="w-16 h-16 rounded-2xl shadow-sm object-cover">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ $booking->psycholog->fullname }}&background=random"
+                                    class="w-16 h-16 rounded-2xl shadow-sm" alt="">
+                            @endif
+
                             <div>
                                 <h2 class="text-xl font-black text-slate-900 italic">{{ $booking->psycholog->fullname }}
                                 </h2>
@@ -64,7 +70,7 @@
                                     </div>
                                 @else
                                     <div class="p-4 bg-slate-100 rounded-2xl text-center">
-                                        <p class="text-xs text-slate-500 font-medium italic">Link pertemuan sedang
+                                        <p class="text-xs text-slate-500 font-medium italic">Link pertemuan belum
                                             disiapkan oleh admin/psikolog.</p>
                                     </div>
                                 @endif
@@ -78,7 +84,7 @@
                     @endif
                 </div>
 
-                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <div class="bg-white rounded-[1rem] p-8 border border-slate-100 shadow-sm">
                     <h4 class="font-bold text-slate-900 mb-6 flex items-center gap-2">
                         <i class="fas fa-file-alt text-slate-400"></i> Detail Keluhan
                     </h4>

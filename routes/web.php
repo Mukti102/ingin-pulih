@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\clientController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\PsychologistWeeklyScheduleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionMeetController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TypeController;
@@ -31,16 +33,23 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::get('client/dashboard',[clientController::class,'index'])->name('client.dashboard');
-Route::get('client/sessions',[clientController::class,'sessions'])->name('client.sessions');
-Route::get('client/sessions/{code}',[clientController::class,'SessionShow'])->name('client.sessions.show');
+Route::get('client/dashboard', [clientController::class, 'index'])->name('client.dashboard');
+Route::get('client/sessions', [clientController::class, 'sessions'])->name('client.sessions');
+Route::get('client/history', [clientController::class, 'history'])->name('client.history');
+Route::get('client/sessions/{code}', [clientController::class, 'SessionShow'])->name('client.sessions.show');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/dashboard/psycholog', [DashboardController::class, 'dashboardPsikolog'])->name('dashboard.psycholog');
+
     Route::resource('jenis-psikolog', TypeController::class);
     Route::resource('topik-keahlian', TopicController::class);
     Route::resource('wilayah-praktik', WilayahController::class);
     Route::resource('users', UserController::class);
     Route::resource('psychologs', PsychologController::class);
+    Route::get('/psycholog/register', [PsychologController::class, 'register'])->name('register.psychologist');
+
     Route::resource('services', ServiceController::class);
     Route::get('/documents/psycholog/{psycholog}', [DocumentController::class, 'show'])
         ->name('documents.show');
@@ -61,8 +70,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/room-create/{id}', [SessionMeetController::class, 'createRoom'])->name('session.create.room');
     Route::patch('/create-note/{id}', [SessionMeetController::class, 'storeNote'])->name('create.note');
 
-    Route::get('/bookings.checkout/{code}', [TransactionController::class, 'checkoutPage'])->name('bookings.checkout');
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
+    });
+
+    Route::resource('transactions', TransactionController::class);
+    Route::get('/bookings/checkout/{code}', [TransactionController::class, 'checkoutPage'])->name('bookings.checkout');
     Route::get('/booking/success/{code}', [TransactionController::class, 'success'])->name('booking.success');
+    Route::post('/midtrans/notification', [TransactionController::class, 'notification'])->name('midtrans.notification');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

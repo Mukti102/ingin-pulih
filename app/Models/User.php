@@ -21,7 +21,11 @@ class User extends Authenticatable
         'email',
         'password',
         'is_active',
+        'date_of_birth',
+        'gender',
+        'address',
         'phone',
+        'avatar',
     ];
 
     public function roles()
@@ -50,6 +54,16 @@ class User extends Authenticatable
         return $this->psycholog()->firstOrFail();
     }
 
+    /**
+     * Scope untuk memfilter user berdasarkan nama role.
+     */
+    public function scopeWithRole($query, string $roleName)
+    {
+        return $query->whereHas('roles', function ($q) use ($roleName) {
+            $q->where('name', $roleName);
+        });
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -71,6 +85,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'date_of_birth' => 'date',
+            'is_active' => 'boolean',
         ];
     }
 }

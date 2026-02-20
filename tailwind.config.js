@@ -16,17 +16,17 @@ export default {
             },
             colors: {
                 brand: {
-                    50: "#f5f3ff",
-                    100: "#ede9fe",
-                    200: "#ddd6fe",
-                    300: "#c4b5fd",
-                    400: "#a78bfa",
-                    500: "#8b5cf6",
-                    600: "#7c3aed",
-                    700: "#6d28d9",
-                    800: "#5b21b6",
-                    900: "#4c1d95",
-                    950: "#2e1065",
+                    50: "#faf5ff",
+                    100: "#f3e8ff",
+                    200: "#e9d5ff",
+                    300: "#e9b4fe",
+                    400: "#d56ffd",
+                    500: "#dc39f9",
+                    600: "#680187ea", // Mendekati ungu cerah di bagian bawah logo
+                    700: "#c022ce", // Warna transisi tengah
+                    800: "#9821a8", // Ungu padat (Solid Purple)
+                    900: "#7e1c87", // Ungu gelap di bagian atas teks logo
+                    950: "#510764", // Deep purple untuk kontras maksimal
                 },
             },
         },

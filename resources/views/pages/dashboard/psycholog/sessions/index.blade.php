@@ -88,8 +88,8 @@
                                             </div>
                                             <small class="text-muted">
                                                 <i class="far fa-clock me-1"></i>
-                                                {{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }} -
-                                                {{ \Carbon\Carbon::parse($item->end_time)->format('H:i') }}
+                                                {{ \Carbon\Carbon::parse($item->booking->start_time)->format('H:i') }} -
+                                                {{ \Carbon\Carbon::parse($item->booking->end_time)->format('H:i') }}
                                             </small>
                                         </td>
                                         <td class="text-center">

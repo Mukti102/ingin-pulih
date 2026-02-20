@@ -1,0 +1,169 @@
+<x-app-layout>
+    <div class="container-fluid">
+        <div class="page-header">
+            <h4 class="page-title">Pengaturan Profil</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="#"><i class="fas fa-home"></i></a>
+                </li>
+                <li class="separator"><i class="fas fa-angle-right"></i></li>
+                <li class="nav-item"><a href="#">User</a></li>
+                <li class="separator"><i class="fas fa-angle-right"></i></li>
+                <li class="nav-item"><a href="#">Edit Profil</a></li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-profile">
+                    <div class="card-header" style="background-image: url('/assets/img/blogpost.jpg')">
+                        <div class="profile-picture">
+                            <div class="avatar avatar-xl">
+                                <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/profile.jpg') }}"
+                                    alt="..." class="avatar-img rounded-circle border border-white">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="user-profile text-center">
+                            <div class="name">{{ $user->name }}</div>
+                            <div class="job text-muted">{{ $user->email }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PATCH')
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Informasi Pribadi</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group @error('name') has-error @enderror">
+                                        <label for="name">Nama Lengkap</label>
+                                        <input type="text" class="form-control" name="name" id="name"
+                                            value="{{ old('name', $user->name) }}">
+                                        @error('name')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group @error('email') has-error @enderror">
+                                        <label for="email">Alamat Email</label>
+                                        <input type="email" class="form-control" name="email" id="email"
+                                            value="{{ old('email', $user->email) }}">
+                                        @error('email')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label for="phone">Nomor Telepon</label>
+                                        <input type="text" class="form-control" name="phone" id="phone"
+                                            value="{{ old('phone', $user->phone) }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label for="gender">Jenis Kelamin</label>
+                                        <select class="form-control" name="gender" id="gender">
+                                            <option value="">Pilih...</option>
+                                            <option value="laki-laki"
+                                                {{ old('gender', $user->gender) == 'laki-laki' ? 'selected' : '' }}>
+                                                Laki-laki</option>
+                                            <option value="perempuan"
+                                                {{ old('gender', $user->gender) == 'perempuan' ? 'selected' : '' }}>
+                                                Perempuan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label for="date_of_birth">Tanggal Lahir</label>
+                                        <input type="date" class="form-control" name="date_of_birth"
+                                            id="date_of_birth"
+                                            value="{{ old('date_of_birth', $user->date_of_birth?->format('Y-m-d')) }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label for="avatar">Update Foto Profil</label>
+                                        <input type="file" class="form-control-file" name="avatar" id="avatar">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="address">Alamat Lengkap</label>
+                                        <textarea class="form-control" name="address" id="address" rows="3">{{ old('address', $user->address) }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="reset" class="btn btn-danger">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-8 offset-md-4 mt-3">
+                <form action="{{ route('password.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Keamanan Kata Sandi</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div
+                                        class="form-group @error('current_password', 'updatePassword') has-error @enderror">
+                                        <label for="current_password">Kata Sandi Saat Ini</label>
+                                        <input type="password" class="form-control" name="current_password"
+                                            id="current_password">
+                                        @error('current_password', 'updatePassword')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group @error('password', 'updatePassword') has-error @enderror">
+                                        <label for="new_password">Kata Sandi Baru</label>
+                                        <input type="password" class="form-control" name="password"
+                                            id="new_password">
+                                        @error('password', 'updatePassword')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="password_confirmation">Konfirmasi Kata Sandi</label>
+                                        <input type="password" class="form-control" name="password_confirmation"
+                                            id="password_confirmation">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-key mr-1"></i> Perbarui Password
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
