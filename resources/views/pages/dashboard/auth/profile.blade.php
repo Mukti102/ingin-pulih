@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer text-right">
+                        <div class="card-footer d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             <button type="reset" class="btn btn-danger">Reset</button>
                         </div>
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer text-right">
+                        <div class="card-footer d-flex justify-content-end">
                             <button type="submit" class="btn btn-warning">
                                 <i class="fas fa-key mr-1"></i> Perbarui Password
                             </button>
@@ -164,6 +164,62 @@
                     </div>
                 </form>
             </div>
+
+            {{-- form set rekening wallet untuk psikolog --}}
+            <div class="col-md-8 offset-md-4 mt-3">
+                <form action="{{ route('bank_account.update') }}" method="POST">
+                    @csrf
+                    @method('POST')
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Informasi Rekening Bank</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group @error('bank_name', 'updateWallet') has-error @enderror">
+                                        <label for="bank_name">Nama Bank</label>
+                                        <input type="text" placeholder="Contoh : BNI , BRI" class="form-control" name="bank_name" id="bank_name"
+                                            value="{{ old('bank_name', $user->psycholog->wallet->bank_name ?? '') }}">
+                                        @error('bank_name', 'updateWallet')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                    <div
+                                        class="form-group @error('account_number', 'updateWallet') has-error @enderror">
+                                        <label for="account_number">Nomor Rekening</label>
+                                        <input type="text" class="form-control" name="account_number"
+                                            id="account_number"
+                                            value="{{ old('account_number', $user->psycholog->wallet->account_number ?? '') }}">
+                                        @error('account_number', 'updateWallet')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                    {{-- holder name --}}
+                                    <div
+                                        class="form-group @error('account_holder_name', 'updateWallet') has-error @enderror">
+                                        <label for="account_holder_name">Nama Pemilik Rekening</label>
+                                        <input type="text" class="form-control" name="account_holder_name"
+                                            id="account_holder_name"
+                                            value="{{ old('account_holder_name', $user->psycholog->wallet->account_holder_name ?? '') }}">
+                                        @error('account_holder_name', 'updateWallet')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-wallet mr-1"></i> Simpan Rekening
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 </x-app-layout>

@@ -126,13 +126,18 @@ fas fa-calendar-alt"></i>
                     <a href="{{ route('bookings.index') }}">
                         <i class="fas fa-desktop"></i>
                         <p>Daftar Booking</p>
-                        {{-- <span class="badge badge-success">4</span> --}}
                     </a>
                 </li>
                 <li class="nav-item {{ isActive('sessions.*') }}">
                     <a href="{{ route('sessions.index') }}">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <p>Daftar Sesi</p>
+                    </a>
+                </li>
+                <li class="nav-item {{ isActive('reviews.*') }}">
+                    <a href="{{ route('reviews.index') }}">
+                        <i class="fas fa-star"></i>
+                        <p>Daftar Ulasan</p>
                     </a>
                 </li>
                 <li class="nav-item {{ isActive('transactions.*') }}">

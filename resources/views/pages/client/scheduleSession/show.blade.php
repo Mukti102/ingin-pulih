@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    @if ($booking->meeting_type)
+                    @if ($booking->meeting_type && $booking->sessionMeet->status == 'active')
                         <div class="space-y-4">
                             <h4 class="font-bold text-slate-900 flex items-center gap-2">
                                 <i class="fas fa-video text-brand"></i> Link Pertemuan
@@ -82,6 +82,7 @@
                             @endif
                         </div>
                     @endif
+                   <x-add-review :booking="$booking"/>
                 </div>
 
                 <div class="bg-white rounded-[1rem] p-8 border border-slate-100 shadow-sm">
@@ -139,9 +140,65 @@
                     <p class="text-[10px] text-white/60 mb-4 leading-relaxed">Jika ada masalah dengan link pertemuan
                         atau ingin reschedule, silakan hubungi psikolog via WhatsApp.</p>
                     <a href="#"
-                        class="block w-full text-center bg-white text-slate-900 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-brand transition-all">Hubungi Psikolog</a>
+                        class="block w-full text-center bg-white text-slate-900 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-brand transition-all">Hubungi
+                        Psikolog</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="reviewModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeReviewModal()">
+            </div>
+
+            <div
+                class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-[2rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form action="{{ route('reviews.store', $booking->id) }}" method="POST" class="p-8">
+                    @csrf
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-black text-slate-900 italic">Berikan Ulasan</h3>
+                        <p class="text-xs text-slate-500">Pengalaman Anda sangat berarti bagi kami.</p>
+                    </div>
+
+                    <div class="flex justify-center gap-2 mb-6" x-data="{ hover: 0, rating: 0 }">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <label class="cursor-pointer transition-transform hover:scale-110">
+                                <input type="radio" name="rating" value="{{ $i }}" class="hidden"
+                                    required>
+                                <i class="fas fa-star text-2xl"
+                                    :class="rating >= {{ $i }} ? 'text-amber-400' : 'text-slate-200'"
+                                    @click="rating = {{ $i }}"></i>
+                            </label>
+                        @endfor
+                    </div>
+
+                    <div class="space-y-4">
+                        <input type="hidden" name="booking_id" value="{{ $booking->id }}">
+                        <input type="hidden" name="psycholog_id" value="{{ $booking->psycholog->id }}">
+                        <div>
+                            <label
+                                class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Komentar
+                                Anda</label>
+                            <textarea name="comment" rows="4" required
+                                class="w-full px-4 py-3 rounded-2xl border-slate-100 bg-slate-50 focus:ring-brand focus:border-brand text-sm italic"
+                                placeholder="Ceritakan sedikit tentang sesi Anda..."></textarea>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="button" onclick="closeReviewModal()"
+                                class="flex-1 px-6 py-3 text-xs font-bold text-slate-400 uppercase tracking-widest hover:bg-slate-50 rounded-xl transition-all">
+                                Batal
+                            </button>
+                            <button type="submit"
+                                class="flex-1 px-6 py-3 text-xs font-bold text-white uppercase tracking-widest bg-brand-600 rounded-xl hover:bg-brand-400 transition-all shadow-lg shadow-slate-200">
+                                Kirim Ulasan
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </x-client-layout>
+

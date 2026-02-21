@@ -6,10 +6,18 @@ use App\Models\Booking;
 use App\Models\Psycholog;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    public $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     public function __invoke()
     {
         $stats = [
@@ -49,7 +57,7 @@ class DashboardController extends Controller
     {
         // Ambil ID psikolog yang sedang login
         $psychologId = auth()->user()->psycholog->id;
-
+        $psycholog = Psycholog::with('user','wallet')->find($psychologId);
         // 1. Statistik Ringkas (Cards)
         $stats = [
             'total_sessions' => \App\Models\Booking::where('psycholog_id', $psychologId)
@@ -101,13 +109,17 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $saldo = $this->paymentService->getSaldoPsycholog($psychologId);
+
         return view('pages.dashboard.psycholog.dashboard', compact(
             'stats',
             'months',
             'chartData',
             'upcomingBooking',
             'recentBookings',
-            'pendingBookings'
+            'pendingBookings',
+            'psycholog',
+            'saldo',
         ));
     }
 }

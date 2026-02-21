@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PsichologServiceController;
 use App\Http\Controllers\PsychologController;
 use App\Http\Controllers\PsychologistWeeklyScheduleController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SessionMeetController;
@@ -79,6 +80,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookings/checkout/{code}', [TransactionController::class, 'checkoutPage'])->name('bookings.checkout');
     Route::get('/booking/success/{code}', [TransactionController::class, 'success'])->name('booking.success');
     Route::post('/midtrans/notification', [TransactionController::class, 'notification'])->name('midtrans.notification');
+
+    Route::post('/withdraw', [TransactionController::class, 'withdraw'])->name('withdraw');
+    Route::post('/bank_account', [TransactionController::class, 'updateBankAccount'])->name('bank_account.update');
+
+    Route::resource('reviews', ReviewController::class);
+    Route::patch('/reviews/{id}/toggle', [ReviewController::class, 'togglePublish'])->name('reviews.toggle-publish');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

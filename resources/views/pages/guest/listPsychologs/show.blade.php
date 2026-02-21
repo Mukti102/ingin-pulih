@@ -24,8 +24,8 @@
 
                         <div class="flex items-center justify-center gap-2 text-yellow-500 mb-6">
                             <i class="fas fa-star"></i>
-                            <span class="font-bold text-gray-900">4.9</span>
-                            <span class="text-gray-400 text-sm">(120 Ulasan)</span>
+                            <span class="font-bold text-gray-900">{{ number_format($averageRating, 1) }}</span>
+                            <span class="text-gray-400 text-sm">({{ $totalReviews }} Ulasan)</span>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gray-50">
@@ -44,10 +44,9 @@
 
             {{-- RIGHT SIDE: Information & Booking --}}
             <div class="lg:col-span-8 space-y-8">
-
                 {{-- About --}}
                 <section class="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4">Tentang Psikolog</h2>
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Tentang</h2>
                     <p class="text-gray-600 leading-relaxed">{{ $psychologist->about }}</p>
                 </section>
 
@@ -63,29 +62,9 @@
                         @endforeach
                     </div>
                 </section>
-
                 <livewire:box-booking :psychologist="$psychologist" />
-
-                {{-- Ulasan --}}
-                {{-- <section>
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-900">Ulasan Klien</h2>
-                        <a href="#" class="text-brand-600 font-bold text-sm">Lihat Semua</a>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-6 bg-gray-50 rounded-2xl border border-gray-100">
-                            <div class="flex items-center gap-2 text-yellow-500 mb-3 text-xs">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                    class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                            <p class="text-sm text-gray-600 italic mb-4">"Sangat membantu saya dalam mengelola stres
-                                pekerjaan. Orangnya sangat pendengar yang baik."</p>
-                            <p class="text-xs font-bold text-gray-900">- Sarah K.</p>
-                        </div>
-                    </div>
-                </section> --}}
-
             </div>
+            <x-review-sections :activeReviews="$activeReviews" />
         </div>
     </div>
 </x-guest-layout>

@@ -4,17 +4,59 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Transaction;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public $paymentService;
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     public function index()
     {
         $transactions = Transaction::with('booking.psycholog')->latest()->get();
         return view('pages.dashboard.transactions.index', compact('transactions'));
+    }
+
+    public function withdraw(Request $request)
+    {
+
+        $request->validate([
+            'amount' => 'required',
+        ]);
+
+        try {
+            $this->paymentService->deductSaldoPsycholog(auth()->user()->psycholog->id, $request->amount);
+            toast()->success('Penarikan berhasil diajukan. Saldo akan diperbarui setelah proses selesai.');
+        } catch (\Exception $e) {
+            toast()->error('Gagal melakukan penarikan: ' . $e->getMessage());
+        }
+
+        return redirect()->back();
+    }
+
+    public function updateBankAccount(Request $request)
+    {
+        $request->validate([
+            'bank_name' => 'required|string',
+            'account_number' => 'required|string',
+            'account_holder_name' => 'required|string',
+        ]);
+        try {
+            $this->paymentService->setBankAccount(auth()->user()->psycholog->id, $request->only('bank_name', 'account_number', 'account_holder_name'));
+            toast()->success('Informasi bank berhasil diperbarui.');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Log::error('Error updating bank account', ['message' => $e->getMessage()]);
+            toast()->error('Gagal memperbarui informasi bank: ' . $e->getMessage());
+        }
     }
 
     public function checkoutPage($code)
@@ -31,8 +73,6 @@ class TransactionController extends Controller
                 'status'       => 'pending',
             ]);
         }
-
-
 
         // 3. Jika snap_token kosong atau kadaluarsa, request ke Midtrans
         if (!$transaction->snap_token) {
@@ -63,43 +103,50 @@ class TransactionController extends Controller
 
     public function notification(Request $request)
     {
-        $payload = $request->all();
-        $signatureKey = hash('sha512', $payload['order_id'] . $payload['status_code'] . $payload['gross_amount'] . config('midtrans.server_key'));
+        try {
 
-        if ($signatureKey !== $payload['signature_key']) {
-            return response()->json(['message' => 'Invalid signature'], 400);
-        }
+            $payload = $request->all();
+            // $signatureKey = hash('sha512', $payload['order_id'] . $payload['status_code'] . $payload['gross_amount'] . config('midtrans.server_key'));
 
-        $transaction = Transaction::where('reference_id', $payload['order_id'])->first();
+            // if ($signatureKey !== $payload['signature_key']) {
+            //     return response()->json(['message' => 'Invalid signature'], 400);
+            // }
 
-        if (!$transaction) {
-            return response()->json(['message' => 'Transaction not found'], 404);
-        }
+            $transaction = Transaction::where('reference_id', $payload['order_id'])->first();
 
-        $transaction->status = $payload['transaction_status'];
-
-
-        $transaction->save();
-
-        if (in_array($payload['transaction_status'], ['cancel', 'deny', 'expire'])) {
-            $booking = Booking::where('code', $transaction->reference_id)->first();
-            if ($booking) {
-                $booking->status = 'cancelled';
-                $booking->save();
+            if (!$transaction) {
+                return response()->json(['message' => 'Transaction not found'], 404);
             }
-        }
 
-        // Update booking status jika pembayaran berhasil
-        if ($payload['transaction_status'] === 'settlement') {
-            $booking = Booking::where('code', $transaction->reference_id)->first();
-            if ($booking) {
-                $booking->status = 'confirmed';
-                $booking->payment_status = 'paid';
-                $booking->save();
+            $transaction->status = $payload['transaction_status'];
+            $transaction->transaction_id = $payload['transaction_id'] ?? null;
+            $transaction->payment_type = $payload['payment_type'] ?? null;
+            $transaction->payload_notification = json_encode($payload);
+
+
+            $transaction->save();
+
+            if (in_array($payload['transaction_status'], ['cancel', 'deny', 'expire'])) {
+                $booking = Booking::where('code', $transaction->reference_id)->first();
+                if ($booking) {
+                    $booking->status = 'cancelled';
+                    $booking->save();
+                }
             }
-        }
 
-        return response()->json(['message' => 'Notification received']);
+            if ($payload['transaction_status'] === 'settlement') {
+                $booking = Booking::where('code', $transaction->reference_id)->first();
+                if ($booking) {
+                    $booking->status = 'confirmed';
+                    $booking->payment_status = 'paid';
+                    $booking->save();
+                }
+            }
+            return response()->json(['message' => 'Notification received']);
+        } catch (\Exception $e) {
+            Log::info('Midtrans notification error', ['message' => $e->getMessage()]);
+            return response()->json(['message' => 'Error processing notification: ' . $e->getMessage()], 500);
+        }
     }
 
     private function generateMidtransSnapToken($booking)

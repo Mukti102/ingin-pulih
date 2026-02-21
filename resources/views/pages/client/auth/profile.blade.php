@@ -1,11 +1,11 @@
 <x-client-layout>
-    <div class="max-w-4xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto py-10 px-1 sm:px-6 lg:px-8">
         
         {{-- Section: Email Verification Alert --}}
         @if (auth()->user()->email_verified_at == null)
-            <div class="max-w-md mx-auto my-10 p-8 bg-white rounded-3xl shadow-xl shadow-violet-100/50 border border-violet-50 text-center">
-                <div class="bg-violet-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 rotate-3">
-                    <i class="fas fa-envelope-open-text text-violet-600 text-3xl"></i>
+            <div class="max-w-md mx-auto my-10 p-8 bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-brand-100/50 border border-brand-50 text-center">
+                <div class="bg-viole-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 rotate-3">
+                    <i class="fas fa-envelope-open-text text-brand-600 text-3xl"></i>
                 </div>
 
                 <h2 class="text-xl font-black text-gray-900 mb-2">Verifikasi Email Anda</h2>
@@ -22,7 +22,7 @@
                 <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
                     <button type="submit"
-                        class="w-full py-3.5 bg-violet-600 text-white rounded-2xl font-bold hover:bg-violet-700 transition-all shadow-lg shadow-violet-200">
+                        class="w-full py-3.5 bg-brand-600 text-white rounded-2xl font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-200">
                         Kirim Ulang Verifikasi
                     </button>
                 </form>
@@ -37,10 +37,10 @@
 
         <div class="space-y-8">
             {{-- Section: Personal Information --}}
-            <section class="bg-white shadow-sm border border-gray-100 rounded-3xl overflow-hidden">
-                <div class="p-8">
+            <section class="bg-white shadow-sm border border-gray-100 rounded-2xl md:rounded-3xl overflow-hidden">
+                <div class="md:p-8 p-4">
                     <div class="flex items-center gap-x-4 mb-8 border-b border-gray-50 pb-5">
-                        <div class="p-3 bg-violet-50 rounded-2xl text-violet-600">
+                        <div class="p-3 bg-brand-50 rounded-2xl text-brand-500">
                             <i class="fas fa-id-card text-xl"></i>
                         </div>
                         <div>
@@ -92,7 +92,7 @@
 
                         <div class="flex justify-end mt-4">
                             <button type="submit"
-                                class="px-8 py-3 bg-violet-600 text-white rounded-2xl text-sm font-bold hover:bg-violet-700 transition-all shadow-lg shadow-violet-100">
+                                class="px-8 py-3 bg-brand-500 text-white rounded-2xl text-sm font-bold hover:bg-brand-700 transition-all shadow-lg shadow-brand-100">
                                 Simpan Perubahan
                             </button>
                         </div>
@@ -101,8 +101,8 @@
             </section>
 
             {{-- Section: Security --}}
-            <section class="bg-white shadow-sm border border-gray-100 rounded-3xl overflow-hidden">
-                <div class="p-8">
+            <section class="bg-white shadow-sm border border-gray-100 rounded-2xl md:rounded-3xl overflow-hidden">
+                <div class="md:p-8 p-4">
                     <div class="flex items-center gap-x-4 mb-8 border-b border-gray-50 pb-5">
                         <div class="p-3 bg-amber-50 rounded-2xl text-amber-600">
                             <i class="fas fa-shield-alt text-xl"></i>
@@ -147,13 +147,13 @@
 
         {{-- Section: CTA for Psychologists --}}
         @if (auth()->user()->email_verified_at)
-            <div class="mt-12 p-8 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-[2.5rem] text-center shadow-xl shadow-violet-200">
+            <div class="mt-12 p-8 bg-gradient-to-r from-brand-600 to-brand-400 rounded-[1rem] md:rounded-[2rem] text-center shadow-xl shadow-brand-200">
                 <h3 class="text-xl font-bold text-white mb-2">Ingin Membantu Sesama?</h3>
-                <p class="text-violet-100 text-sm mb-6 max-w-lg mx-auto">
+                <p class="text-brand-100 text-sm mb-6 max-w-lg mx-auto">
                     Bergabunglah sebagai mitra psikolog kami dan bantu klien menemukan ketenangan jiwa mereka.
                 </p>
                 <a href="{{route('register.psychologist')}}" 
-                   class="inline-flex items-center px-8 py-3 bg-white text-violet-600 rounded-full text-sm font-black hover:bg-violet-50 transition-colors uppercase tracking-widest">
+                   class="inline-flex items-center px-8 py-3 bg-white text-brand-600 rounded-full text-sm font-black hover:bg-viole-50 transition-colors uppercase tracking-widest">
                     <i class="fas fa-user-md me-2"></i> Daftar sebagai Psikolog
                 </a>
             </div>

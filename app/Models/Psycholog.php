@@ -23,6 +23,11 @@ class Psycholog extends Model
         return $this->belongsTo(Type::class, 'jenis_psikolog');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'psycholog_id');
+    }
+
     public function topics()
     {
         return $this->belongsToMany(Topic::class, 'psycholog_topics');
@@ -43,7 +48,17 @@ class Psycholog extends Model
         return $this->hasMany(PsychologistWeeklySchedule::class);
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'psycholog_id');
+    }
+
+    public function payout()
+    {
+        return $this->hasMany(Payout::class, 'psycholog_id');
+    }
+
     public function booking(){
-        return $this->hasOne(Booking::class,'psycholog_id');
+        return $this->hasMany(Booking::class,'psycholog_id');
     }
 }

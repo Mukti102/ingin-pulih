@@ -50,7 +50,7 @@ class clientController extends Controller
         $user = auth()->user();
 
         $historySessions = Booking::where('user_id', $user->id)
-            ->whereIn('status', ['completed', 'cancelled', 'expired', 'pending'])
+            ->whereIn('status', ['complete', 'cancelled', 'expired', 'pending'])
             ->with('psycholog')
             ->latest()
             ->paginate(10);

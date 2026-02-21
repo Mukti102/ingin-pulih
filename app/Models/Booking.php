@@ -38,6 +38,11 @@ class Booking extends Model
         return $this->hasOne(Transaction::class, 'booking_id');
     }
 
+    public function review()
+    {
+        return $this->hasOne(Review::class, 'booking_id');
+    }
+
 
     // app/Models/Booking.php
 

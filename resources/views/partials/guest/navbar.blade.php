@@ -47,7 +47,6 @@
                             <div class="text-right hidden lg:block">
                                 <p class="text-xs font-bold text-gray-800 leading-none uppercase">{{ auth()->user()->name }}
                                 </p>
-                                <p class="text-[10px] text-brand-500 font-semibold">User Client</p>
                             </div>
                             <div
                                 class="h-10 w-10 rounded-full border-2 border-brand-500 p-0.5 group-hover:border-orange-500 transition-all">
@@ -104,7 +103,7 @@
             <a href="#tentang"
                 class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Tentang
                 Kami</a>
-            <a href="/psikolog"
+            <a href="{{ route('list.psychologs') }}"
                 class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">List
                 Psikolog</a>
 

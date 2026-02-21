@@ -1,4 +1,4 @@
- <section class="bg-brand-900 rounded-[2.5rem] p-8 text-white shadow-xl"
+ <section class="bg-brand-900 md:rounded-[2.5rem] rounded-[1rem] p-6 md:p-8 text-white shadow-xl"
      x-on:scroll-to-alert.window="document.getElementById('alert-error').scrollIntoView({ behavior: 'smooth' })">
      @if (session()->has('error'))
          <div class="mb-4 p-4 bg-red-500/20 border border-red-500 text-red-200 rounded-2xl text-sm">
@@ -144,7 +144,7 @@
                              <i class="far fa-clock text-lg"></i>
                          </div>
                          <div>
-                             <p class="text-[10px] text-brand-400 uppercase font-bold tracking-wider">Sesi Tersedia</p>
+                             <p class="text-[10px] text-brand-100 uppercase font-bold tracking-wider">Sesi Tersedia</p>
                              <p class="text-lg font-black text-white">
                                  {{ $availableTimes['start'] }} - {{ $availableTimes['end'] }}
                              </p>
@@ -171,7 +171,7 @@
          {{-- Checkbox Topik --}}
          <div class="space-y-3 ">
              <label class="text-sm font-bold text-brand-300 block">Pilih topik permasalahan</label>
-             <div class="grid grid-cols-2 gap-3">
+             <div class="grid md:grid-cols-2 grid-cols-1 gap-3">
                  @foreach ($psychologist->topics as $topic)
                      <label
                          class="flex items-center gap-3 p-3 bg-brand-800/50 border border-brand-700 rounded-xl cursor-pointer hover:bg-brand-800 transition-all">
@@ -190,7 +190,7 @@
          <div class="space-y-2">
              <label class="text-sm font-bold text-brand-300">Deskripsi Masalah</label>
              <textarea wire:model="description" rows="4"
-                 class="w-full bg-brand-800 border-2 {{ $errors->has('description') ? 'border-red-500' : 'border-brand-700' }} rounded-2xl p-4 focus:border-orange-500 outline-none transition-all"
+                 class="w-full bg-brand-800 border-2 {{ $errors->has('description') ? 'border-red-500' : 'border-brand-700' }} rounded-2xl p-4 focus:border-orange-500 placeholder:text-brand-300 outline-none transition-all"
                  placeholder="Ceritakan sedikit masalahmu..."></textarea>
              @error('description')
                  <span class="text-red-500 text-xs font-bold">{{ $message }}</span>
@@ -207,7 +207,7 @@
          <div class="space-y-2">
              <label class="text-sm font-bold text-brand-300">Harapan setelah konseling</label>
              <textarea wire:model="expectation" rows="3"
-                 class="w-full bg-brand-800 border-2 {{ $errors->has('expectation') ? 'border-red-500' : 'border-brand-700' }} rounded-2xl p-4 focus:border-orange-500 outline-none transition-all"
+                 class="w-full bg-brand-800 border-2 {{ $errors->has('expectation') ? 'border-red-500' : 'border-brand-700' }} rounded-2xl p-4 focus:border-orange-500 placeholder:text-brand-300  outline-none transition-all"
                  placeholder="Apa yang ingin kamu capai?"></textarea>
              @error('expectation')
                  <span class="text-red-500 text-xs font-bold">{{ $message }}</span>

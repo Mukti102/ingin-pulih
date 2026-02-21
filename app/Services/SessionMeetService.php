@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Storage;
 
 class SessionMeetService
 {
+    public $paymentService;
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
 
     public function list()
     {
@@ -68,7 +73,7 @@ class SessionMeetService
             DB::commit();
             return $session;
         } catch (\Exception $e) {
-            Log::info('error store room',['message' => $e->getMessage()]);
+            Log::info('error store room', ['message' => $e->getMessage()]);
             Log::error('Error storing room:', ['message' => $e->getMessage(), 'session_id' => $id]);
             DB::rollBack();
             throw $e;
@@ -100,7 +105,10 @@ class SessionMeetService
                     'document_path' => $path,
                 ]);
                 $session->status = 'completed';
+                $session->booking()->update(['status' => 'complete']);
                 $session->save();
+
+                $this->paymentService->saveSaldoPsycholog($session->booking->psycholog_id, $session->booking->earning);
             } else {
                 $path = null;
                 if ($documentFile) {
@@ -114,6 +122,7 @@ class SessionMeetService
                 ]);
 
                 $session->status = 'completed';
+                $session->booking()->update(['status' => 'complete']);
                 $session->save();
             }
 

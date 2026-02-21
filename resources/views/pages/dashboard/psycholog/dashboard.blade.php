@@ -1,4 +1,5 @@
 <x-app-layout>
+
     <div class="row">
         <div class="col-md-8">
             <div class="card card-round">
@@ -14,6 +15,7 @@
         </div>
 
         <div class="col-md-4">
+            <x-card-saldo :psycholog="$psycholog" />
             <div class="card card-dark bg-secondary-gradient card-round">
                 <div class="card-body pb-0">
                     <div class="h1 fw-bold float-end"><i class="fas fa-video opacity-25"></i></div>
@@ -23,7 +25,8 @@
                         <div class="py-3">
                             <div class="d-flex mb-2">
                                 <div class="avatar avatar-xs me-2">
-                                    <span class="avatar-title rounded-circle border border-white bg-primary"><i class="far fa-calendar-alt"></i></span>
+                                    <span class="avatar-title rounded-circle border border-white bg-primary"><i
+                                            class="far fa-calendar-alt"></i></span>
                                 </div>
                                 <span class="text-white small align-self-center">
                                     {{ \Carbon\Carbon::parse($upcomingBooking->session_date)->translatedFormat('d M Y') }}
@@ -31,13 +34,21 @@
                             </div>
                             <div class="d-flex">
                                 <div class="avatar avatar-xs me-2">
-                                    <span class="avatar-title rounded-circle border border-white bg-primary"><i class="far fa-clock"></i></span>
+                                    <span class="avatar-title rounded-circle border border-white bg-primary"><i
+                                            class="far fa-clock"></i></span>
                                 </div>
-                                <span class="text-white small align-self-center">{{ $upcomingBooking->start_time }} WIB</span>
+                                <span class="text-white small align-self-center">{{ $upcomingBooking->start_time }}
+                                    WIB</span>
                             </div>
                         </div>
                         <div class="pb-4">
-                            <a href="{{ route('sessions.show', encrypt($upcomingBooking->sessionMeet->id)) }}" class="btn btn-white btn-border btn-round w-100">Mulai Sesi</a>
+                            @if ($upcomingBooking->sessionMeet)
+                                <a href="{{ route('sessions.show', encrypt($upcomingBooking->sessionMeet->id)) }}"
+                                    class="btn btn-white btn-border btn-round w-100">Mulai Sesi</a>
+                            @else
+                                <a href="{{ route('bookings.show', encrypt($upcomingBooking->id)) }}"
+                                    class="btn btn-white btn-border btn-round w-100">Konfirmasi Booking</a>
+                            @endif
                         </div>
                     @else
                         <p class="op-7">Tidak ada jadwal dalam waktu dekat.</p>
@@ -45,7 +56,7 @@
                     @endif
                 </div>
             </div>
-            
+
             <div class="card card-round">
                 <div class="card-body">
                     <div class="card-title fw-bold">Total Sesi Selesai</div>
@@ -81,27 +92,29 @@
                             </thead>
                             <tbody>
                                 @forelse($recentBookings as $item)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-sm me-3">
-                                                <span class="avatar-title rounded-circle bg-info text-white">{{ substr($item->user->name, 0, 1) }}</span>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-sm me-3">
+                                                    <span
+                                                        class="avatar-title rounded-circle bg-info text-white">{{ substr($item->user->name, 0, 1) }}</span>
+                                                </div>
+                                                <span class="text-sm font-weight-bold">{{ $item->user->name }}</span>
                                             </div>
-                                            <span class="text-sm font-weight-bold">{{ $item->user->name }}</span>
-                                        </div>
-                                    </td>
-                                    <td>{{ \Carbon\Carbon::parse($item->session_date)->format('d/m/Y') }}</td>
-                                    <td><code class="text-primary">{{ $item->code }}</code></td>
-                                    <td>
-                                        <span class="badge {{ $item->status == 'complete' ? 'badge-success' : ($item->status == 'pending' ? 'badge-warning' : 'badge-danger') }}">
-                                            {{ strtoupper($item->status) }}
-                                        </span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($item->session_date)->format('d/m/Y') }}</td>
+                                        <td><code class="text-primary">{{ $item->code }}</code></td>
+                                        <td>
+                                            <span
+                                                class="badge {{ $item->status == 'complete' ? 'badge-success' : ($item->status == 'pending' ? 'badge-warning' : 'badge-danger') }}">
+                                                {{ strtoupper($item->status) }}
+                                            </span>
+                                        </td>
+                                    </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="4" class="text-center p-5">Belum ada riwayat.</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-center p-5">Belum ada riwayat.</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -119,10 +132,12 @@
                     @forelse($pendingBookings as $item)
                         <div class="d-flex align-items-center border-bottom pb-3 mb-3">
                             <div class="avatar avatar-online">
-                                <span class="avatar-title rounded-circle bg-light text-warning"><i class="fas fa-exclamation-circle"></i></span>
+                                <span class="avatar-title rounded-circle bg-light text-warning"><i
+                                        class="fas fa-exclamation-circle"></i></span>
                             </div>
                             <div class="flex-1 ms-3 pt-1">
-                                <h6 class="text-uppercase fw-bold mb-1">{{ $item->user->name }} <span class="text-warning ps-3">Pending</span></h6>
+                                <h6 class="text-uppercase fw-bold mb-1">{{ $item->user->name }} <span
+                                        class="text-warning ps-3">Pending</span></h6>
                                 <span class="text-muted small">{{ $item->code }}</span>
                             </div>
                             <div class="float-end pt-1">
@@ -136,7 +151,7 @@
                     @endforelse
                 </div>
             </div>
-            
+
             <div class="card bg-success-gradient card-round text-white">
                 <div class="card-body">
                     <i class="fas fa-quote-left fa-2x opacity-25 mb-3"></i>
@@ -154,8 +169,7 @@
                     type: 'line',
                     data: {
                         labels: {!! json_encode($months) !!},
-                        datasets: [
-                            {
+                        datasets: [{
                                 label: 'Selesai',
                                 data: {!! json_encode($chartData['complete']) !!},
                                 borderColor: '#31CE36',
@@ -175,10 +189,48 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
                     }
                 });
             });
         </script>
+    @endpush
+    @push('styles')
+        <style>
+            .card-wallet {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                border-radius: 2rem !important;
+                border: none;
+            }
+
+            .text-brand {
+                color: #8d94ff;
+                /* Sesuaikan dengan warna brand Anda */
+            }
+
+            .bg-brand {
+                background-color: #8d94ff;
+                border: none;
+            }
+
+            .bg-brand:hover {
+                background-color: #7a81e0;
+            }
+
+            .tracking-widest {
+                letter-spacing: 0.1em;
+            }
+
+            .font-black {
+                font-weight: 900;
+            }
+        </style>
     @endpush
 </x-app-layout>

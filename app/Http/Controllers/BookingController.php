@@ -109,6 +109,13 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        //
+        try {
+            $this->bookingService->delete($booking);
+            toast('Berhasil Menghapus Booking', 'success');
+            return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully.');
+        } catch (Exception $th) {
+            toast('Gagal Menghapus Booking', 'error');
+            return redirect()->route('bookings.index')->with('error', 'Failed to delete booking.');
+        }
     }
 }

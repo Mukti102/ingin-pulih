@@ -8,7 +8,7 @@
     <div class="container-fluid pb-5">
         <div class="row">
             <div class="col-lg-8">
-                @if ($session->status == 'pending')
+                @if ($session->status == 'active')
                     <div class="alert alert-primary border-0 shadow-sm rounded-4 d-flex align-items-center mb-4"
                         role="alert">
                         <div class="spinner-grow spinner-grow-sm text-success me-3" role="status"></div>

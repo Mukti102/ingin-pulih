@@ -16,11 +16,11 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        if (auth()->user()->hasRole('admin','psycholog')) {
+        if (auth()->user()->hasRole('psycholog') || auth()->user()->hasRole('admin')) {
             return view('pages.dashboard.auth.profile', [
                 'user' => $request->user(),
             ]);
-        }else{
+        } else {
             return view('pages.client.auth.profile', [
                 'user' => $request->user(),
             ]);
@@ -33,7 +33,7 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
-        
+
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
             $request->user()->avatar = $avatarPath;
