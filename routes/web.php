@@ -5,6 +5,7 @@ use App\Http\Controllers\clientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PsichologServiceController;
 use App\Http\Controllers\PsychologController;
@@ -86,6 +87,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('reviews', ReviewController::class);
     Route::patch('/reviews/{id}/toggle', [ReviewController::class, 'togglePublish'])->name('reviews.toggle-publish');
+    Route::get('/payouts', [PayoutController::class, 'index'])->name('payouts.index');
+    Route::get('/payouts/{id}', [PayoutController::class, 'show'])->name('payouts.show');
+    Route::delete('/payouts/{id}', [PayoutController::class, 'destroy'])->name('payouts.destroy');
+    Route::patch('/payouts/{id}/approve', [PayoutController::class, 'approve'])->name('payouts.approve');
+    Route::patch('/payouts/{id}/reject', [PayoutController::class, 'reject'])->name('payouts.reject');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

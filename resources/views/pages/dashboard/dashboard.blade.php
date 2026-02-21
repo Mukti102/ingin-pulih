@@ -171,15 +171,66 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                        <div class="card-title">Pengajuan Pencairan Saldo</div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Psikolog</th>
+                                    <th scope="col" class="text-end">Tanggal</th>
+                                    <th scope="col" class="text-end">Nominal</th>
+                                    <th scope="col" class="text-end">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($requestPayouts as $payout)
+                                    <tr>
+                                        <th scope="row">
+                                            #{{ $loop->iteration }}
+                                        </th>
+                                        <td>{{ $payout->psycholog->fullname ?? 'N/A' }}</td>
+                                        <td class="text-end">{{ $payout->created_at->format('M d, Y') }}</td>
+                                        <td class="text-end">Rp {{ number_format($payout->amount, 0, ',', '.') }}</td>
+                                        <td class="text-end">
+                                            @php
+                                                $badgeClass =
+                                                    [
+                                                        'approved' => 'badge-success',
+                                                        'pending' => 'badge-warning',
+                                                        'rejected' => 'badge-danger',
+                                                        'cancelled' => 'badge-secondary',
+                                                    ][$payout->status] ?? 'badge-dark';
+                                            @endphp
+                                            <span
+                                                class="badge {{ $badgeClass }}">{{ strtoupper($payout->status) }}</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Cek apakah elemen ada
                 const chartElement = document.getElementById('bookingStatusChart');
-    
+
                 if (chartElement) {
                     const ctx = chartElement.getContext('2d');
-    
+
                     new Chart(ctx, {
                         type: 'line',
                         data: {

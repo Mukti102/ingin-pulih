@@ -27,6 +27,7 @@ class DashboardController extends Controller
             'new_users' => User::whereHas('roles', function ($q) {
                 $q->where('name', 'user');
             })->where('created_at', '>=', now()->subDays(7))->count(),
+            'total_payout' => \App\Models\Payout::where('status', 'pending')->count(),
         ];
 
         $recent_transactions = Transaction::with('booking.user')
@@ -39,6 +40,8 @@ class DashboardController extends Controller
             return now()->subMonths($i)->format('M');
         });
 
+        $requestPayouts = \App\Models\Payout::where('status', 'pending')->latest()->get();
+
         $statuses = ['pending', 'confirmed', 'failed', 'complete', 'cancelled'];
         $chartData = [];
 
@@ -50,7 +53,7 @@ class DashboardController extends Controller
                     ->count();
             });
         }
-        return view('pages.dashboard.dashboard', compact('stats', 'recent_transactions', 'months', 'chartData'));
+        return view('pages.dashboard.dashboard', compact('stats', 'recent_transactions', 'months', 'chartData', 'requestPayouts'));
     }
 
     public function dashboardPsikolog()
@@ -109,7 +112,7 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $saldo = $this->paymentService->getSaldoPsycholog($psychologId);
+        
 
         return view('pages.dashboard.psycholog.dashboard', compact(
             'stats',
@@ -119,7 +122,6 @@ class DashboardController extends Controller
             'recentBookings',
             'pendingBookings',
             'psycholog',
-            'saldo',
         ));
     }
 }

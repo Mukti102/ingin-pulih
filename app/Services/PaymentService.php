@@ -42,6 +42,39 @@ class PaymentService
     }
 
     // kurangi saldo
+    public function reduceSaldoPsycholog($psychologId, $amount)
+    {
+        $wallet = Wallet::where('psycholog_id', $psychologId)->first();
+
+        if (!$wallet) {
+            throw new \Exception('Wallet tidak ditemukan untuk psikolog ini.');
+        }
+
+        if ($wallet->balance < $amount) {
+            throw new \Exception('Saldo tidak cukup untuk melakukan transaksi ini.');
+        }
+
+        $wallet->balance -= $amount;
+        $wallet->save();
+
+        return $wallet;
+    }
+
+    // tambah saldo
+    public function addSaldoPsycholog($psychologId, $amount)
+    {
+        $wallet = Wallet::firstOrCreate(
+            ['psycholog_id' => $psychologId],
+            ['balance' => 0]
+        );
+
+        $wallet->balance += $amount;
+        $wallet->save();
+
+        return $wallet;
+    }
+
+    // kurangi saldo
     public function deductSaldoPsycholog($psychologId, $amount)
     {
         $wallet = Wallet::where('psycholog_id', $psychologId)->first();

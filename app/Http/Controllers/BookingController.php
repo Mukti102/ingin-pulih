@@ -32,6 +32,9 @@ class BookingController extends Controller
             $authPsycholog = auth()->user()->psycholog;
             $bookings = $this->bookingService->list($authPsycholog->id);
             return view('pages.dashboard.psycholog.booking.index', compact('bookings'));
+        }else{
+            $bookings = Booking::with('user', 'psycholog', 'service')->latest()->get();
+            return view('pages.dashboard.psycholog.booking.index', compact('bookings'));
         }
     }
 
