@@ -42,6 +42,7 @@
         {{ $slot }}
     </div>
     @include('partials.guest.footer')
+    @stack('scripts')
     @livewireScripts
 </body>
 

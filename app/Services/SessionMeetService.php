@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Mail\BookingConfirmedToClient;
+use App\Mail\RoomAlreadyCreated;
 use App\Models\SessionMeet;
 use App\Models\SessionNote;
 use App\Models\SessionRoom;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class SessionMeetService
@@ -31,12 +34,24 @@ class SessionMeetService
 
     public function store(array $data)
     {
-        $session = DB::transaction(function () use ($data) {
-            SessionMeet::create($data);
-        });
+        try {
+            $session = DB::transaction(function () use ($data) {
+                // TAMBAHKAN 'return' di depan create
+                return SessionMeet::create($data);
+            });
 
-        return $session;
+            // Pastikan relasi 'booking' dan 'user' sudah di-load agar pengiriman email lancar
+            $session->load(['booking.user']);
+
+            Mail::to($session->booking->user->email)->queue(new BookingConfirmedToClient($session->booking));
+
+            return $session;
+        } catch (\Exception $e) {
+            Log::error('Error creating session meet:', ['message' => $e->getMessage(), 'data' => $data]);
+            throw $e;
+        }
     }
+
 
 
     public function find($id)
@@ -50,7 +65,7 @@ class SessionMeetService
     {
         DB::beginTransaction();
         try {
-            $session = SessionMeet::findOrFail($id);
+            $session = SessionMeet::with('booking.user')->findOrFail($id);
 
             if ($session->room) {
                 $session->room->update([
@@ -60,6 +75,8 @@ class SessionMeetService
                 ]);
                 $session->status = 'active';
                 $session->save();
+
+                Mail::to($session->booking->user->email)->queue(new RoomAlreadyCreated($session));
             } else {
                 $session->room()->create([
                     'provider'     => $data['provider'],
@@ -68,6 +85,7 @@ class SessionMeetService
                 ]);
                 $session->status = 'active';
                 $session->save();
+                Mail::to($session->booking->user->email)->queue(new RoomAlreadyCreated($session));
             }
 
             DB::commit();

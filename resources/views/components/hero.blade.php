@@ -6,7 +6,7 @@
           class="absolute bottom-0 left-0 -mb-20 -ml-20 w-[500px] h-[500px] bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000">
       </div>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="relative z-10 py-20 sm:py-28 lg:py-32 lg:max-w-2xl">
+          <div class="relative z-10 py-10 sm:py-20 lg:py-20 lg:max-w-2xl">
               <div
                   class="inline-flex items-center space-x-2 bg-brand-50 border border-brand-100 px-3 py-1 rounded-full mb-6">
                   <span class="flex h-2 w-2 rounded-full bg-brand-600"></span>
@@ -23,7 +23,7 @@
               </p>
 
               <div class="mt-10 flex flex-col sm:flex-row gap-4">
-                  <a href="/psikolog"
+                  <a href="{{route('list.psychologs')}}"
                       class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-2xl text-white bg-brand-600 hover:bg-brand-700 shadow-xl shadow-brand-200 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
                       <i class="fas fa-calendar-check mr-2"></i> Buat Janji Sekarang
                   </a>
@@ -61,12 +61,12 @@
 
       <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 flex items-center justify-center p-12 lg:p-24">
           <div class="relative w-full max-w-lg">
-              <div
+              {{-- <div
                   class="absolute -top-4 -left-4 w-72 h-72 bg-brand-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob">
-              </div>
+              </div> --}}
 
-              <img class="relative rounded-3xl shadow-2xl transform transition-transform duration-500 hover:rotate-2"
-                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              <img class="relative rounded-3xl  transform transition-transform duration-500 hover:rotate-2"
+                  src="https://i.pinimg.com/736x/49/b8/fd/49b8fd19a81f4e49b7cc6ac711531dbc.jpg"
                   alt="Mental Health Consultation">
 
               <div

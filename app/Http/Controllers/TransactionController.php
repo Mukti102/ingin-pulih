@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewBookingNotificationToPsychologist;
+use App\Mail\PaymentSuccessToClient;
 use App\Models\Booking;
 use App\Models\Transaction;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -27,7 +30,6 @@ class TransactionController extends Controller
 
     public function withdraw(Request $request)
     {
-
         $request->validate([
             'amount' => 'required',
         ]);
@@ -98,6 +100,9 @@ class TransactionController extends Controller
             return redirect()->back();
         }
 
+        Mail::to($booking->user->email)->send(new PaymentSuccessToClient($booking));
+        Mail::to($booking->psycholog->user->email)->send(new NewBookingNotificationToPsychologist($booking));
+
         return view('pages.guest.booking-success', compact('booking'));
     }
 
@@ -140,6 +145,9 @@ class TransactionController extends Controller
                     $booking->status = 'confirmed';
                     $booking->payment_status = 'paid';
                     $booking->save();
+                    
+                    Mail::to($booking->user->email)->send(new PaymentSuccessToClient($booking));
+                    Mail::to($booking->psycholog->user->email)->send(new NewBookingNotificationToPsychologist($booking));
                 }
             }
             return response()->json(['message' => 'Notification received']);

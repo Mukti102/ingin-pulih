@@ -10,7 +10,7 @@
              Berikan Ulasan
          </button>
      </div>
- @else
+ @elseif($booking->review)
      <div class="mt-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 text-center">
          <p class="text-xs text-slate-500 italic">Anda telah memberikan ulasan untuk sesi ini. Terima
              kasih!</p>
@@ -19,7 +19,7 @@
  <script>
      function openReviewModal() {
          document.getElementById('reviewModal').classList.remove('hidden');
-         document.body.style.overflow = 'hidden'; 
+         document.body.style.overflow = 'hidden';
      }
 
      function closeReviewModal() {

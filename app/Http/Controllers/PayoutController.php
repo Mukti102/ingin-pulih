@@ -55,7 +55,7 @@ class PayoutController extends Controller
     }
 
     public function destroy($id)
-    {
+    {   
         $success = $this->payoutService->deletePayout(decrypt($id));
         if ($success) {
             toast()->success('Payout berhasil dihapus.');

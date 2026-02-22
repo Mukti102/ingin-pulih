@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Mail\ApprovedRequestPayout;
 use App\Models\Payout;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class PayoutService
@@ -49,6 +51,9 @@ class PayoutService
             $payout->status = 'approved';
             $payout->save();
             $this->paymentService->reduceSaldoPsycholog($payout->psycholog_id, $payout->amount);
+
+            Mail::to($payout->psycholog->user->email)->queue(new ApprovedRequestPayout($payout));
+
             return true;
         } catch (\Exception $e) {
             Log::error('Error approving payout', ['message' => $e->getMessage()]);

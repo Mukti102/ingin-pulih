@@ -32,7 +32,7 @@
                         </a>
                     @else
                         <p class="mt-4 text-white/60">Belum ada jadwal sesi yang terkonfirmasi.</p>
-                        <a href="/"
+                        <a href="{{route('list.psychologs')}}"
                             class="mt-6 inline-block bg-white text-slate-900 font-black px-6 py-3 rounded-xl text-xs uppercase tracking-wider">Cari
                             Psikolog</a>
                     @endif
@@ -43,7 +43,7 @@
             <div class="bg-white rounded-xl p-8 border border-slate-100 shadow-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-black text-slate-900 text-lg">Aktivitas Terakhir</h3>
-                    <a href="#" class="text-xs font-bold text-brand uppercase tracking-widest">Lihat
+                    <a href="{{ route('client.history') }}" class="text-xs font-bold text-brand uppercase tracking-widest">Lihat
                         Semua</a>
                 </div>
                 <div class="space-y-4">

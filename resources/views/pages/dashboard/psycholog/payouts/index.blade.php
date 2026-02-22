@@ -66,7 +66,6 @@
                                                             method="POST" class="form-delete">
                                                             @csrf
                                                             @method('DELETE')
-
                                                             <button type="submit" class="dropdown-item text-danger">
                                                                 <i class="fa fa-trash me-2"></i> Hapus
                                                             </button>

@@ -29,6 +29,10 @@ class SessionMeetController extends Controller
     public function index()
     {
         $authPsycholog = auth()->user()->psycholog;
+        if (!$authPsycholog) {
+            toast()->error('Anda tidak memiliki akses ke halaman ini.');
+            return redirect()->route('dashboard');
+        }
         $bookings = $this->bookingService->list($authPsycholog->id);
         $sessions = $this->sessionMeetService->list();
         return view('pages.dashboard.psycholog.sessions.index', compact('sessions', 'bookings'));
@@ -52,14 +56,14 @@ class SessionMeetController extends Controller
             toast('Berhasil Menambahkan Sesi', 'success');
             return redirect()->route('sessions.index');
         } catch (Exception $th) {
-            Log::info('error session',['message' => $th->getMessage()]);
+            Log::info('error session', ['message' => $th->getMessage()]);
             toast('Gagal menambahkan sesi', 'error');
             return redirect()->back();
         }
     }
 
     public function storeNote(NoteRequest $request, $id)
-    {    
+    {
         try {
             $this->sessionMeetService->storeNote($request->all(), $id);
             toast('Berhasil Menambahkan catatan', 'success');
@@ -88,7 +92,7 @@ class SessionMeetController extends Controller
     }
 
     public function createRoom(RoomRequest  $request, $id)
-    {    
+    {
         try {
             $this->sessionMeetService->storeRoom($request->all(), $id);
             Alert('Success', 'Berhasil Membuat Room', 'success');
@@ -110,8 +114,16 @@ class SessionMeetController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SessionMeet $sessionMeet)
+    public function destroy($id)
     {
-        //
+        $sessionMeet = SessionMeet::findOrFail($id);
+        try {
+            $sessionMeet->delete();
+            toast('Berhasil Menghapus Sesi', 'success');
+            return redirect()->route('sessions.index');
+        } catch (Exception $th) {
+            toast('Gagal Menghapus Sesi', 'error');
+            return redirect()->route('sessions.index');
+        }
     }
 }

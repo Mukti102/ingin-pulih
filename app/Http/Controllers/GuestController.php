@@ -2,11 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Psycholog;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller
 {
+    public function home()
+    {
+        return view('pages.guest.home');
+    }
+
+    public function articles()
+    {
+        $articles = Article::latest()->get();
+        return view('pages.guest.articles.index', compact('articles'));
+    }
+
+    public function showArticle($slug)
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+        $relatedArticles = Article::where('id', '!=', $article->id)
+            ->where(function ($query) use ($article) {
+                foreach ($article->tags as $tag) {
+                    $query->orWhere('tags', 'like', '%' . $tag . '%');
+                }
+            })
+            ->limit(3)
+            ->get();
+        return view('pages.guest.articles.show', compact('article','relatedArticles'));
+    }
+
     public function listPsychologs()
     {
         if (!auth()->check()) {
@@ -26,10 +52,8 @@ class GuestController extends Controller
         $psychologist = Psycholog::with(['user', 'wilayah', 'jenisPsikolog', 'topics', 'services', 'weeklySchedules', 'booking', 'reviews.booking.user'])
             ->find($id);
 
-        // Ambil hanya review yang sudah dipublish
         $activeReviews = $psychologist->reviews()->where('published', true)->latest()->get();
 
-        // Hitung rata-rata rating
         $averageRating = $activeReviews->avg('rating') ?? 0;
         $totalReviews = $activeReviews->count();
 

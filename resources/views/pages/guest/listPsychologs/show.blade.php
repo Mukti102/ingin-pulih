@@ -50,7 +50,6 @@
                     <p class="text-gray-600 leading-relaxed">{{ $psychologist->about }}</p>
                 </section>
 
-                {{-- Topics --}}
                 <section>
                     <h2 class="text-xl font-bold text-gray-900 mb-4">Topik Keahlian</h2>
                     <div class="flex flex-wrap gap-2">

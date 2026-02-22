@@ -87,10 +87,10 @@ class BookingService
             Transaction::create([
                 'user_id'      => auth()->id(),
                 'booking_id'   => $booking->id,
-                'reference_id' => $bookingCode, // Ini yang jadi order_id di Midtrans
+                'reference_id' => $bookingCode, 
                 'amount'       => $totalPrice,
                 'status'       => 'pending',
-                'type'         => 'payment', // opsional: jika Anda punya fitur topup/payout
+                'type'         => 'payment',
             ]);
 
             return $booking;

@@ -46,14 +46,13 @@
                                 {{ $booking->end_time }} WIB</p>
                         </div>
                     </div>
-
-                    @if ($booking->meeting_type && $booking->sessionMeet->status == 'active')
+                    @if ($booking->meeting_type && $booking->sessionMeet)
                         <div class="space-y-4">
                             <h4 class="font-bold text-slate-900 flex items-center gap-2">
                                 <i class="fas fa-video text-brand"></i> Link Pertemuan
                             </h4>
                             @if ($booking->payment_status == 'paid' || $booking->status == 'confirmed')
-                                @if ($booking->sessionMeet && $booking->sessionMeet->room)
+                                @if ($booking->sessionMeet && $booking->sessionMeet->room && $booking->sessionMeet->status == 'active')
                                     <div
                                         class="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
                                         <div class="flex-1 truncate">
@@ -68,6 +67,8 @@
                                             Join Now
                                         </a>
                                     </div>
+                                @elseif($booking->sessionMeet && $booking->sessionMeet->room && $booking->sessionMeet->status == 'completed')
+                                    <div></div>
                                 @else
                                     <div class="p-4 bg-slate-100 rounded-2xl text-center">
                                         <p class="text-xs text-slate-500 font-medium italic">Link pertemuan belum
@@ -82,7 +83,7 @@
                             @endif
                         </div>
                     @endif
-                   <x-add-review :booking="$booking"/>
+                    <x-add-review :booking="$booking" />
                 </div>
 
                 <div class="bg-white rounded-[1rem] p-8 border border-slate-100 shadow-sm">
@@ -201,4 +202,3 @@
         </div>
     </div>
 </x-client-layout>
-

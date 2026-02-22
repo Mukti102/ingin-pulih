@@ -255,7 +255,6 @@
                             data-bs-toggle="modal" data-bs-target="#confirmPaymentModal">
                             <i class="fas fa-check-double me-2"></i>Konfirmasi
                         </button>
-
                     </div>
                 @endif
                 <div class="modal fade" id="confirmPaymentModal" tabindex="-1" aria-hidden="true">

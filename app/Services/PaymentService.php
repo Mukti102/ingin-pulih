@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\RequestPayoutMail;
 use App\Models\Payout;
+use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentService
 {
@@ -92,12 +95,17 @@ class PaymentService
             throw new \Exception('Saldo tidak cukup untuk melakukan transaksi ini.');
         }
 
-        Payout::create([
+        $payout = Payout::create([
             'psycholog_id' => $psychologId,
             'amount' => $amount,
             'status' => 'pending',
         ]);
 
+        $admins = User::withRole('admin')->get();
+
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->queue(new RequestPayoutMail($payout));
+        }
         return $wallet;
     }
 }

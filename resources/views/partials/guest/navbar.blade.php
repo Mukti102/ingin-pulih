@@ -7,13 +7,13 @@
 
 <nav x-data="{ open: false }" class="bg-white border-b border-brand-100 sticky top-0 z-50 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-20">
+        <div class="flex justify-between h-16 md:h-20">
             {{-- Logo --}}
             <div class="flex-shrink-0 flex items-center">
                 <a href="/" class="flex items-center gap-2">
                     @if (get_setting('app_logo'))
                         <img src="{{ Storage::url(get_setting('app_logo')) }}" alt="Logo"
-                            class=" w-20 rounded-xl object-cover">
+                            class=" w-16 md:w-20 rounded-xl object-cover">
                     @else
                         <div
                             class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center shadow-lg shadow-brand-200">
@@ -33,7 +33,7 @@
                     class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Beranda</a>
                 <a href="#tentang"
                     class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Tentang</a>
-                <a href="#"
+                <a href="{{ route('articles') }}"
                     class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Article</a>
                 <a href="{{ route('list.psychologs') }}"
                     class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Psikolog</a>

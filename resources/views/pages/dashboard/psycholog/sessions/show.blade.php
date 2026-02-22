@@ -124,7 +124,7 @@
                         @if (!$session->notes)
                             <button class="btn btn-sm btn-outline-primary rounded-pill" data-bs-toggle="modal"
                                 data-bs-target="#addNoteModal">
-                                <i class="fas fa-plus me-1"></i> Tambah Catatan
+                                <i class="fas fa-plus me-1"></i> Akhiri Meeting & Tambah Catatan
                             </button>
                         @else
                             <button class="btn btn-sm btn-light text-primary rounded-pill border" data-bs-toggle="modal"
