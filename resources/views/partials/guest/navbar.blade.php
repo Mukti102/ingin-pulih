@@ -103,6 +103,8 @@
             <a href="#tentang"
                 class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Tentang
                 Kami</a>
+            <a href="{{ route('articles') }}"
+                class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Artikel</a>
             <a href="{{ route('list.psychologs') }}"
                 class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">List
                 Psikolog</a>

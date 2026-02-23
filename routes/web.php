@@ -33,6 +33,8 @@ Route::get('/cari-psikolog/{id}', [GuestController::class, 'detailPsikolog'])->n
 
 // callback route untuk payment gateway
 Route::post('/payment/callback', [TransactionController::class, 'notification'])->name('midtrans.notification');
+Route::get('/payment/success/{code}', [TransactionController::class, 'success'])->name('booking.success');
+
 
 // --- AUTHENTICATED ROUTES ---
 Route::middleware('auth')->group(function () {
@@ -91,7 +93,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/payouts/{id}', [PayoutController::class, 'show'])->name('payouts.show');
     Route::delete('/payouts/{id}', [PayoutController::class, 'destroy'])->name('payouts.destroy');
 
-    Route::get('/payment/success/{id}', [TransactionController::class, 'success'])->name('booking.success');
 
     // register psycholog register.psychologist
     Route::get('/register/psychologist', [PsychologController::class, 'register'])->name('register.psychologist');

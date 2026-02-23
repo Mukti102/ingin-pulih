@@ -4,7 +4,7 @@
             <a href="{{ route('dashboard') }}" class="logo">
                 @if (get_setting('app_logo'))
                     <img src="{{ Storage::url(get_setting('app_logo')) }}" alt="Logo" class="navbar-brand"
-                        height="60">
+                        height="30">
                 @else
                     <img src="/assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand"
                         height="20" />

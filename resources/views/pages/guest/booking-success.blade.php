@@ -22,7 +22,7 @@
                     </div>
                     <div class="flex justify-between items-center pb-4 border-b border-slate-50">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Psikolog</span>
-                        <span class="font-bold text-slate-800">{{ $booking->psycholog->name }}</span>
+                        <span class="font-bold text-slate-800">{{ $booking->psycholog->fullname }}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Jadwal Sesi</span>
