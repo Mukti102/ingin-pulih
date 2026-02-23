@@ -37,6 +37,7 @@
 </head>
 
 <body>
+    
     @include('partials.guest.navbar')
     <div>
         {{ $slot }}

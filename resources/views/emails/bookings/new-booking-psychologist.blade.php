@@ -17,7 +17,7 @@
             <p><strong>Ringkasan Permintaan:</strong><br>
                 Tanggal: {{ date('d M Y', strtotime($booking->session_date)) }}<br>
                 Waktu: {{ $booking->start_time }} - {{ $booking->end_time }}<br>
-                Topik: {{ $booking->topics }}</p>
+                Topik: {{ is_array($booking->topics) ? implode(', ', $booking->topics) : $booking->topics }}</p>
         </div>
 
         <p>Harap segera login ke dashboard Admin/Psikolog untuk <strong>Konfirmasi</strong> jadwal ini agar Client

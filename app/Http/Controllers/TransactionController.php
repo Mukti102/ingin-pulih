@@ -92,7 +92,7 @@ class TransactionController extends Controller
     {
         $booking = Booking::where('code', $code)
             ->where('user_id', auth()->id())
-            ->with(['psycholog'])
+            ->with(['psycholog.user', 'user', 'service'])
             ->firstOrFail();
 
         if ($booking->status !== 'confirmed' || $booking->payment_status !== 'paid') {
@@ -100,8 +100,8 @@ class TransactionController extends Controller
             return redirect()->back();
         }
 
-        Mail::to($booking->user->email)->send(new PaymentSuccessToClient($booking));
-        Mail::to($booking->psycholog->user->email)->send(new NewBookingNotificationToPsychologist($booking));
+        Mail::to($booking->user->email)->queue(new PaymentSuccessToClient($booking));
+        Mail::to($booking->psycholog->user->email)->queue(new NewBookingNotificationToPsychologist($booking));
 
         return view('pages.guest.booking-success', compact('booking'));
     }
