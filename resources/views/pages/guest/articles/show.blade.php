@@ -1,3 +1,12 @@
+@push('seo')
+    <meta name="description" content="{{ Str::limit(strip_tags($article->content), 150) }}">
+    <meta property="og:title" content="{{ $article->title }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($article->content), 150) }}">
+    <meta property="og:image" content="{{ asset('storage/' . $article->thumbnail) }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="article">
+@endpush
+
 <x-guest-layout>
     <div class="bg-white min-h-screen pb-20">
         {{-- Progress Bar (Opsional - Muncul saat scroll) --}}
