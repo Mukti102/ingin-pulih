@@ -146,8 +146,8 @@ class TransactionController extends Controller
                     $booking->payment_status = 'paid';
                     $booking->save();
                     
-                    Mail::to($booking->user->email)->queue(new PaymentSuccessToClient($booking));
-                    Mail::to($booking->psycholog->user->email)->queue(new NewBookingNotificationToPsychologist($booking));
+                    Mail::to($booking->user->email)->send(new PaymentSuccessToClient($booking));
+                    Mail::to($booking->psycholog->user->email)->send(new NewBookingNotificationToPsychologist($booking));
                 }
             }
             return response()->json(['message' => 'Notification received']);

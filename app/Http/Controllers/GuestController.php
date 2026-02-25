@@ -49,7 +49,7 @@ class GuestController extends Controller
         }
 
         $id = decrypt($id);
-        $psychologist = Psycholog::with(['user', 'wilayah', 'jenisPsikolog', 'topics', 'services', 'weeklySchedules', 'booking', 'reviews.booking.user'])
+        $psychologist = Psycholog::with(['user', 'wilayah', 'jenisPsikolog', 'topics', 'services', 'weeklySchedules', 'booking', 'reviews.booking.user','educations'])
             ->find($id);
 
         $activeReviews = $psychologist->reviews()->where('published', true)->latest()->get();

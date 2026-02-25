@@ -5,6 +5,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\clientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EducationController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\ProfileController;
@@ -33,8 +34,6 @@ Route::get('/cari-psikolog/{id}', [GuestController::class, 'detailPsikolog'])->n
 
 // callback route untuk payment gateway
 Route::post('/payment/callback', [TransactionController::class, 'notification'])->name('midtrans.notification');
-Route::get('/payment/success/{code}', [TransactionController::class, 'success'])->name('booking.success');
-
 
 // --- AUTHENTICATED ROUTES ---
 Route::middleware('auth')->group(function () {
@@ -76,6 +75,10 @@ Route::middleware('auth')->group(function () {
         // Session & Room Management
         Route::patch('/room-create/{id}', [SessionMeetController::class, 'createRoom'])->name('session.create.room');
         Route::patch('/create-note/{id}', [SessionMeetController::class, 'storeNote'])->name('create.note');
+
+        // educations
+        Route::post('/education-psycholog',[EducationController::class,'store'])->name('education.store');
+        Route::delete('/education-psycholog/{id}',[EducationController::class,'store'])->name('education.destroy');
     });
 
     // 3. ROUTE KHUSUS CLIENT / USER BIASA
@@ -93,6 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/payouts/{id}', [PayoutController::class, 'show'])->name('payouts.show');
     Route::delete('/payouts/{id}', [PayoutController::class, 'destroy'])->name('payouts.destroy');
 
+    Route::get('/payment/success/{id}', [TransactionController::class, 'success'])->name('booking.success');
 
     // register psycholog register.psychologist
     Route::get('/register/psychologist', [PsychologController::class, 'register'])->name('register.psychologist');

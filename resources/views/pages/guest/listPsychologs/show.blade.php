@@ -50,6 +50,24 @@
                     <p class="text-gray-600 leading-relaxed">{{ $psychologist->about }}</p>
                 </section>
 
+                <section class="p-5 bg-gray-50 rounded-xl shadow-sm border border-1 border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Pendidikan</h2>
+                    <div class="space-y-4"> {{-- Gunakan space-y agar antar riwayat ada jarak --}}
+                        @foreach ($psychologist->educations as $edu)
+                            <div class="flex flex-col border-b border-gray-100 pb-3 last:border-0">
+                                <span class="text-sm font-semibold text-brand-600">
+                                    {{ $edu->graduation_year }}
+                                </span>
+                                <h3 class="text-md font-bold text-gray-800">
+                                    {{ $edu->institution_name }}
+                                </h3>
+                                <p class="text-sm text-gray-600">
+                                    {{ $edu->degree }} {{ $edu->major ? '— ' . $edu->major : '' }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
                 <section>
                     <h2 class="text-xl font-bold text-gray-900 mb-4">Topik Keahlian</h2>
                     <div class="flex flex-wrap gap-2">

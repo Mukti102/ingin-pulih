@@ -18,6 +18,11 @@ class Psycholog extends Model
         return $this->belongsTo(Wilayah::class, 'wilayah_id');
     }
 
+    public function educations()
+    {
+        return $this->hasMany(Education::class, 'psycholog_id');
+    }
+
     public function jenisPsikolog()
     {
         return $this->belongsTo(Type::class, 'jenis_psikolog');
@@ -58,7 +63,8 @@ class Psycholog extends Model
         return $this->hasMany(Payout::class, 'psycholog_id');
     }
 
-    public function booking(){
-        return $this->hasMany(Booking::class,'psycholog_id');
+    public function booking()
+    {
+        return $this->hasMany(Booking::class, 'psycholog_id');
     }
 }

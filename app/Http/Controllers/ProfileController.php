@@ -16,8 +16,8 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        if (auth()->user()->hasRole('psycholog') || auth()->user()->hasRole('admin')) {
-            return view('pages.dashboard.auth.profile', [
+        if (auth()->user()->hasRole('psycholog') || auth()->user()->hasRole('admin')) {    
+        return view('pages.dashboard.auth.profile', [
                 'user' => $request->user(),
             ]);
         } else {
