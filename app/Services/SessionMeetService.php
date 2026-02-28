@@ -142,6 +142,7 @@ class SessionMeetService
                 $session->status = 'completed';
                 $session->booking()->update(['status' => 'complete']);
                 $session->save();
+                $this->paymentService->saveSaldoPsycholog($session->booking->psycholog_id, $session->booking->earning);
             }
 
             DB::commit();

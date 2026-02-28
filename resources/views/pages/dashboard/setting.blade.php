@@ -58,9 +58,15 @@
                                         <textarea class="form-control" name="app_description" rows="2">{{ $settings['app_description'] ?? '' }}</textarea>
                                     </div>
                                     <div class="form-group">
+                                        <label>Nama Founder/CEO</label>
+                                        <input type="text" class="form-control" name="app_founder"
+                                            value="{{ $settings['app_founder'] ?? config('app.founder') }}">
+                                    </div>
+                                    <div class="form-group">
                                         <label>Logo Utama</label>
                                         @if (isset($settings['app_logo']))
-                                            <div class="mb-2"><img src="{{ asset('storage/' . $settings['app_logo']) }}"
+                                            <div class="mb-2"><img
+                                                    src="{{ asset('storage/' . $settings['app_logo']) }}"
                                                     height="40"></div>
                                         @endif
                                         <input type="file" class="form-control-file" name="app_logo">

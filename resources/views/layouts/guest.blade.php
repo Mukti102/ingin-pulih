@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ get_setting('app_name') }}</title>
+    <meta name="description" content="{{ get_setting('app_description') }}">
 
     @stack('seo')
 

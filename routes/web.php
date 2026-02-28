@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 // --- PUBLIC ROUTES ---
 Route::get('/', [GuestController::class, 'home'])->name('home');
+Route::get('/tentang-kami',[GuestController::class,'about'])->name('about');
 Route::get('/cari-psikolog', [GuestController::class, 'listPsychologs'])->name('list.psychologs');
 Route::get('/artikel', [GuestController::class, 'articles'])->name('articles');
 Route::get('/artikel/{slug}', [GuestController::class, 'showArticle'])->name('showArticle');

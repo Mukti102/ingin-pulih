@@ -19,7 +19,6 @@ class PsychologServiceService
             // optional: cegah duplicate kombinasi psycholog + service
             $exists = PsichologService::where('psycholog_id', $data['psycholog_id'])
                 ->where('service_id', $data['service_id'])
-                ->where('type', $data['type']) // Tambahkan ini
                 ->exists();
 
             if ($exists) {
@@ -29,7 +28,7 @@ class PsychologServiceService
                 'psycholog_id' => $data['psycholog_id'],
                 'service_id'   => $data['service_id'],
                 'price'        => $data['price'],
-                'type'         => $data['type'],
+                'type'         => 'online',
                 'is_active'    => $data['is_active'] ?? true,
             ]);
         });
@@ -43,7 +42,7 @@ class PsychologServiceService
                 'service_id' => $data['service_id'] ?? $psychologService->service_id,
                 'price'      => $data['price'] ?? $psychologService->price,
                 'is_active'  => $data['is_active'] ?? $psychologService->is_active,
-                'type'         => $data['type'] ?? $psychologService->type,
+                'type'         => $psychologService->type,
             ]);
 
             return $psychologService->fresh(['psycholog', 'service']);

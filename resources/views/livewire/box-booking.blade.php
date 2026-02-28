@@ -24,7 +24,7 @@
              </button>
 
              {{-- Tombol Offline --}}
-             <button wire:click="$set('type', 'offline')" type="button"
+             {{-- <button wire:click="$set('type', 'offline')" type="button"
                  class="p-4 rounded-2xl border-2 flex items-center gap-3 transition-all duration-300 {{ $type == 'offline' ? 'border-orange-500 bg-brand-800 shadow-lg shadow-orange-900/20' : 'border-brand-700 bg-brand-800/50 opacity-60' }}">
                  <i
                      class="fas fa-map-marker-alt text-xl {{ $type == 'offline' ? 'text-orange-500' : 'text-brand-400' }}"></i>
@@ -32,7 +32,7 @@
                      <p class="font-bold text-white uppercase text-xs tracking-widest">Offline</p>
                      <p class="text-[10px] text-brand-300">Tatap Muka</p>
                  </div>
-             </button>
+             </button> --}}
          </div>
 
          {{-- DAFTAR LAYANAN --}}
@@ -146,7 +146,7 @@
                          <div>
                              <p class="text-[10px] text-brand-100 uppercase font-bold tracking-wider">Sesi Tersedia</p>
                              <p class="text-lg font-black text-white">
-                                 {{ $availableTimes['start'] }} - {{ $availableTimes['end'] }}
+                                 {{ $availableTimes['start'] }} - {{ $availableTimes['end'] }} WIB
                              </p>
                          </div>
                      </div>

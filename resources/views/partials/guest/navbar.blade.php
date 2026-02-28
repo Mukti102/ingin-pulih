@@ -31,12 +31,12 @@
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/"
                     class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Beranda</a>
-                <a href="#tentang"
-                    class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Tentang</a>
+                <a href="{{route('about')}}"
+                    class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Tentang Kami</a>
                 <a href="{{ route('articles') }}"
                     class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Article</a>
                 <a href="{{ route('list.psychologs') }}"
-                    class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Cari Psikolog</a>
+                    class="text-gray-600 hover:text-brand-600 font-medium transition-all hover:scale-110">Cari Psikolog & Praktisi</a>
 
                 <div class="h-6 w-px bg-gray-200 mx-2"></div>
 
@@ -100,12 +100,11 @@
         <div class="px-4 pt-2 pb-6 space-y-1">
             <a href="/"
                 class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Beranda</a>
-            <a href="#tentang"
-                class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Tentang
+            <a href="{{route('about')}}"
+                class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Tentang Kami
                 Kami</a>
             <a href="{{ route('list.psychologs') }}"
-                class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">List
-                Psikolog</a>
+                class="block px-3 py-3 text-base font-semibold text-gray-700 hover:bg-brand-50 rounded-xl">Cari Psikolog & Praktisi</a>
 
             <div class="pt-4 border-t border-gray-100 mt-4">
                 @auth

@@ -108,7 +108,7 @@
                                                                     </option>
                                                                 </select>
                                                             </div>
-                                                            <div class="mb-3">
+                                                            {{-- <div class="mb-3">
                                                                 <label class="form-label">Pilih Type Layanan</label>
                                                                 <select name="type" class="form-control" required>
                                                                     <option value="">-- Pilih Type Layanan --
@@ -122,7 +122,7 @@
                                                                         Offline
                                                                     </option>
                                                                 </select>
-                                                            </div>
+                                                            </div> --}}
 
                                                         </div>
 
@@ -172,7 +172,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label class="form-label">Pilih Type Layanan</label>
                         <select name="type" class="form-control" required>
                             <option value="">-- Pilih Type Layanan --</option>
@@ -183,7 +183,7 @@
                                 Offline
                             </option>
                         </select>
-                    </div>
+                    </div> --}}
                     <div class="mb-3">
                         <x-form.input-group name="price" label="Harga" prefix="Rp" type="number"
                             placeholder="0" />

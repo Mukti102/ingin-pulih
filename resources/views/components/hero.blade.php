@@ -18,7 +18,7 @@
               </h1>
 
               <p class="mt-6 text-lg text-gray-600 leading-relaxed max-w-xl">
-                  Temukan ruang aman untuk bercerita. Bersama tim psikolog berlisensi kami, mari langkah demi langkah
+                  Temukan ruang aman untuk bercerita. Bersama tim Psikolog & Praktisi Kesehatan Mental berlisensi kami, mari langkah demi langkah
                   merajut kembali senyuman dan ketenangan pikiran Anda.
               </p>
 

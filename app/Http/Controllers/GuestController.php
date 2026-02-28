@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Psycholog;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller
@@ -30,26 +31,28 @@ class GuestController extends Controller
             })
             ->limit(3)
             ->get();
-        return view('pages.guest.articles.show', compact('article','relatedArticles'));
+        return view('pages.guest.articles.show', compact('article', 'relatedArticles'));
     }
 
     public function listPsychologs()
     {
-        if (!auth()->check()) {
-            return redirect()->route('login');
-        }
-
         return view('pages.guest.listPsychologs.index');
+    }
+
+    public function about()
+    {
+        $services = Service::all();
+        return view('pages.guest.about', compact('services'));
     }
 
     public function detailPsikolog($id)
     {
         if (!auth()->check()) {
-            return redirect()->route('login');
+            return redirect()->guest(route('login'));
         }
 
         $id = decrypt($id);
-        $psychologist = Psycholog::with(['user', 'wilayah', 'jenisPsikolog', 'topics', 'services', 'weeklySchedules', 'booking', 'reviews.booking.user','educations'])
+        $psychologist = Psycholog::with(['user', 'wilayah', 'jenisPsikolog', 'topics', 'services', 'weeklySchedules', 'booking', 'reviews.booking.user', 'educations'])
             ->find($id);
 
         $activeReviews = $psychologist->reviews()->where('published', true)->latest()->get();
