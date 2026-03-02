@@ -36,7 +36,22 @@
                                 @forelse ($schedules as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ ucfirst($item->day_of_week) }}</td>
+                                        <td>
+                                            {{-- Mengonversi nama hari ke Bahasa Indonesia --}}
+                                            @php
+                                                $hari = [
+                                                    'Monday' => 'Senin',
+                                                    'Tuesday' => 'Selasa',
+                                                    'Wednesday' => 'Rabu',
+                                                    'Thursday' => 'Kamis',
+                                                    'Friday' => 'Jumat',
+                                                    'Saturday' => 'Sabtu',
+                                                    'Sunday' => 'Minggu',
+                                                ];
+                                                $dayName = ucfirst($item->day_of_week);
+                                            @endphp
+                                            {{ $hari[$dayName] ?? $dayName }}
+                                        </td>
                                         <td>{{ $item->start_time }}</td>
                                         <td>{{ $item->end_time }}</td>
                                         <td>
@@ -54,7 +69,8 @@
                                                 </button>
 
                                                 {{-- DELETE --}}
-                                                <form action="{{ route('psycholog-weekly-schedules.destroy', $item->id) }}"
+                                                <form
+                                                    action="{{ route('psycholog-weekly-schedules.destroy', $item->id) }}"
                                                     method="POST" class="form-delete">
                                                     @csrf
                                                     @method('DELETE')
@@ -64,24 +80,27 @@
                                                 </form>
                                             </div>
                                             {{-- ================= EDIT MODAL ================= --}}
-                                            <div class="modal fade" id="editScheduleModal{{ $item->id }}" tabindex="-1">
+                                            <div class="modal fade" id="editScheduleModal{{ $item->id }}"
+                                                tabindex="-1">
                                                 <div class="modal-dialog">
-                                                    <form action="{{ route('psycholog-weekly-schedules.update', $item->id) }}"
+                                                    <form
+                                                        action="{{ route('psycholog-weekly-schedules.update', $item->id) }}"
                                                         method="POST" class="modal-content">
                                                         @csrf
                                                         @method('PUT')
-        
+
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">Edit Jadwal</h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal"></button>
                                                         </div>
-        
+
                                                         <div class="modal-body">
-        
+
                                                             <div class="mb-3">
                                                                 <label class="form-label">Hari</label>
-                                                                <select name="day_of_week" class="form-control" required>
+                                                                <select name="day_of_week" class="form-control"
+                                                                    required>
                                                                     @foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
                                                                         <option value="{{ $day }}"
                                                                             {{ $item->day_of_week == $day ? 'selected' : '' }}>
@@ -90,20 +109,22 @@
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-        
+
                                                             <div class="mb-3">
-        
-                                                                <x-form.input type="time"  name="start_time" label="Jam Mulai"
-                                                                    value="{{ $item->start_time }}" required="true" />
-        
+
+                                                                <x-form.input type="time" name="start_time"
+                                                                    label="Jam Mulai" value="{{ $item->start_time }}"
+                                                                    required="true" />
+
                                                             </div>
-        
+
                                                             <div class="mb-3">
-                                                                <x-form.input type="time"  name="end_time" label="Jam Selesai"
-                                                                    value="{{ $item->end_time }}" required="true" />
-        
+                                                                <x-form.input type="time" name="end_time"
+                                                                    label="Jam Selesai" value="{{ $item->end_time }}"
+                                                                    required="true" />
+
                                                             </div>
-        
+
                                                             <div class="mb-3">
                                                                 <label class="form-label">Status</label>
                                                                 <select name="is_active" class="form-control">
@@ -117,9 +138,9 @@
                                                                     </option>
                                                                 </select>
                                                             </div>
-        
+
                                                         </div>
-        
+
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">
@@ -129,7 +150,7 @@
                                                                 Update
                                                             </button>
                                                         </div>
-        
+
                                                     </form>
                                                 </div>
                                             </div>
@@ -180,13 +201,11 @@
                     </div>
 
                     <div class="mb-3">
-                        <x-form.input type="time" name="start_time" label="Jam Mulai" 
-                            required="true" />
+                        <x-form.input type="time" name="start_time" label="Jam Mulai" required="true" />
                     </div>
 
                     <div class="mb-3">
-                        <x-form.input type="time"  name="end_time" label="Jam Selesai" 
-                            required="true" />
+                        <x-form.input type="time" name="end_time" label="Jam Selesai" required="true" />
                     </div>
                 </div>
 

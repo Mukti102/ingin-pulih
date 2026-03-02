@@ -108,7 +108,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <a href="{{ route('bookings.show', $transaction->booking_id) }}"
+                        <a href="{{ route('bookings.show', encrypt($transaction->booking_id)) }}"
                             class="btn btn-brand-600 w-100 rounded-3 fw-bold">
                             Lihat Detail Booking
                         </a>

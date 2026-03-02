@@ -57,7 +57,6 @@ class PsichologServiceController extends Controller
                         )
                 ],
                 'price' => 'required|numeric|min:0',
-                'type' => 'required',
             ]);
 
             $validated['psycholog_id'] = $authPsycholog->id;
