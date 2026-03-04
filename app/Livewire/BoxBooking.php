@@ -21,6 +21,8 @@ class BoxBooking extends Component
     public $expectation = '';
     public $is_followup = false;
     public $service_id;
+    public $fromDateToDate = '';
+
     public function mount($psychologist)
     {
         $this->psychologist = $psychologist;
@@ -63,7 +65,7 @@ class BoxBooking extends Component
 
 
     public function store(BookingService $bookingService)
-    {  
+    {
 
         if (!auth()->check()) {
             return redirect()->route('login');
@@ -93,7 +95,7 @@ class BoxBooking extends Component
                 return;
             }
 
-            $pService = \App\Models\PsichologService::where('service_id',$this->service_id)->first();
+            $pService = \App\Models\PsichologService::where('service_id', $this->service_id)->first();
 
             $booking = $bookingService->store([
                 'psycholog_id'        => $this->psychologist->id,
@@ -119,6 +121,16 @@ class BoxBooking extends Component
 
     public function render()
     {
+        $startDate = now();
+        $daysCount = 7; // Default 7 hari
+
+        if ($this->fromDateToDate && str_contains($this->fromDateToDate, ' to ')) {
+            $range = explode(' to ', $this->fromDateToDate);
+            $startDate = Carbon::parse($range[0]);
+            $endDate = Carbon::parse($range[1]);
+            $daysCount = $startDate->diffInDays($endDate) + 1;
+        }
+
         // 1. Ambil layanan
         $services = $this->psychologist->services()
             ->where('type', $this->type)
@@ -134,14 +146,16 @@ class BoxBooking extends Component
         // 2. Ambil tanggal yang sudah full/terbooking
         // Asumsi: tabel bookings punya kolom 'booking_date' dan 'psycholog_id'
         $bookedDates = Booking::where('psycholog_id', $this->psychologist->id)
-            // ->whereIn('status', ['confirmed', 'paid']) // Hanya yang sudah fix
+            ->whereIn('status', ['confirmed', 'pending']) // Hanya yang sudah fix
             ->pluck('session_date') // Ambil kolom tanggal saja
             ->toArray();
 
         return view('livewire.box-booking', [
             'filteredServices' => $services,
             'bookedDates'      => $bookedDates,
-            'workingDays'      => $workingDays
+            'workingDays'      => $workingDays,
+            'viewStartDate'    => $startDate,
+            'viewDaysCount'    => $daysCount,
         ]);
     }
 }

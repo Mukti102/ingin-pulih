@@ -146,20 +146,28 @@
                         <span class="text-sm font-black text-gray-100">Semua</span>
                         <span class="text-sm font-black text-gray-100">Jadwal</span>
                     </button>
-                    @for ($i = 0; $i < 7; $i++)
+                    @for ($i = 0; $i < $daysCount; $i++)
                         @php
-                            $date = now()->addDays($i);
+                            $date = $startDate->copy()->addDays($i);
                             $dateValue = $date->format('Y-m-d');
                         @endphp
-                        <button wire:click="$set('selectedDate', '{{ $dateValue }}')"
-                            class="flex-shrink-0 flex flex-col items-center justify-center min-w-[80px] py-3 rounded-2xl border hover:border-brand-300 hover:bg-brand-50 transition-all group {{ $selectedDate == $dateValue ? 'border-brand-300 bg-brand-50' : 'border border-gray-300' }}">
+
+                        {{-- Tambahkan wire:key menggunakan $dateValue --}}
+                        <button wire:key="date-item-{{ $dateValue }}"
+                            wire:click="$set('selectedDate', '{{ $dateValue }}')"
+                            class="flex-shrink-0 flex flex-col items-center justify-center min-w-[80px] py-3 rounded-2xl border hover:border-brand-300 hover:bg-brand-50 transition-all group {{ $selectedDate == $dateValue ? 'border-brand-300 bg-brand-50' : 'border-gray-300 shadow-sm' }}">
+
+                            {{-- ... isi button tetap sama ... --}}
                             <span
-                                class="text-[10px] font-bold {{ $selectedDate == $dateValue ? 'text-brand-500' : 'text-gray-400' }} uppercase uppercase group-hover:text-brand-600">
+                                class="text-[10px] font-bold {{ $selectedDate == $dateValue ? 'text-brand-500' : 'text-gray-400' }} uppercase group-hover:text-brand-600">
                                 {{ $date->locale('id')->translatedFormat('D') }}
                             </span>
                             <span
                                 class="text-lg font-black {{ $selectedDate == $dateValue ? 'text-black' : 'text-gray-900' }}">
                                 {{ $date->format('d') }}
+                            </span>
+                            <span class="text-[9px] font-medium text-gray-400">
+                                {{ $date->format('M') }}
                             </span>
                         </button>
                     @endfor

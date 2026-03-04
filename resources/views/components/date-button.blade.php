@@ -1,6 +1,6 @@
 @props(['id' => 'date-range-picker', 'value' => 'Pilih Tanggal'])
 
-<div class="relative">
+<div class="relative" wire:ignore>
     <button id="{{ $id }}"
         class="flex items-center gap-4 px-5 py-4 bg-brand-700 text-white rounded-xl  active:scale-95 w-max group border border-brand-800">
         <div
@@ -30,7 +30,7 @@
                     const finalRange = startDate + " to " + endDate;
                     dateText.innerText = dateStr.replace(" to ", " - ");
                     
-                    @this.set('selectedDate', finalRange);
+                    @this.set('fromDateToDate', finalRange);
                 }
             },
             // Menyesuaikan tampilan agar elegan

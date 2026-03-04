@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class clientController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        if ($user->isPsycholog()) {
+            return redirect()->route('dashboard.psycholog');
+        } elseif ($user->isAdmin()) {
+            return redirect()->route('dashboard');
+        }
+
         $user = auth()->user();
-    
+
         $upcomingBooking = Booking::where('user_id', $user->id)
             ->where('session_date', '>=', now()->toDateString())
             ->whereIn('status', ['confirmed', 'paid'])

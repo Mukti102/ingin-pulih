@@ -11,6 +11,7 @@ use App\Models\Wilayah;
 use App\Services\PsychologService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PsychologController extends Controller
@@ -27,6 +28,15 @@ class PsychologController extends Controller
 
     public function register()
     {
+        $user = Auth::user();
+
+        if (
+            $user->isPsycholog()
+        ) {
+            return redirect()->back();
+        }
+
+
         $wilayahs = Wilayah::all();
         $types = Type::all();
         $topics = Topic::all();

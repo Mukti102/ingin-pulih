@@ -9,17 +9,19 @@
     </div>
     <div class="card-body">
         <div class="d-grid gap-2">
-            @if (!$psycholog->is_verified)
+            @if (!$psycholog->is_verified && $psycholog->document->is_verified)
                 <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
                     data-bs-target="#modalVerifyAccount">
                     <i class="icon-check-circle me-1"></i> Verifikasi Akun
                 </button>
             @endif
 
+            @if (!$psycholog->document->is_verified)
             <button type="button" class="btn btn-outline-primary w-100" data-bs-toggle="modal"
                 data-bs-target="#modalUpdateStatus">
                 <i class="icon-file-text me-1"></i> Update Status Dokumen
             </button>
+            @endif
         </div>
     </div>
 </div>
@@ -35,7 +37,8 @@
                     <h5>Konfirmasi Verifikasi</h5>
                     <p class="text-muted">Apakah Anda yakin ingin memverifikasi akun
                         <strong>{{ $psycholog->fullname }}</strong>? Ini akan memberikan tanda centang verifikasi pada
-                        profil mereka.</p>
+                        profil mereka.
+                    </p>
                 </div>
                 <div class="modal-footer border-0 justify-content-center pt-0">
                     <button type="button" class="btn btn-link text-muted me-2" data-bs-dismiss="modal">Batal</button>

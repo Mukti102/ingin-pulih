@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 // --- PUBLIC ROUTES ---
 Route::get('/', [GuestController::class, 'home'])->name('home');
-Route::get('/tentang-kami',[GuestController::class,'about'])->name('about');
+Route::get('/tentang-kami', [GuestController::class, 'about'])->name('about');
 Route::get('/cari-psikolog', [GuestController::class, 'listPsychologs'])->name('list.psychologs');
 Route::get('/artikel', [GuestController::class, 'articles'])->name('articles');
 Route::get('/artikel/{slug}', [GuestController::class, 'showArticle'])->name('showArticle');
@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('psychologs', PsychologController::class);
         Route::resource('services', ServiceController::class);
         Route::resource('articles', ArticleController::class);
+        Route::patch('/psycholog-verified/{id}', [PsychologController::class, 'verified'])->name('psycholog.verified');
 
         // Payout Management (Hanya Admin yang bisa Approve/Reject)
         Route::patch('/payouts/{id}/approve', [PayoutController::class, 'approve'])->name('payouts.approve');
@@ -78,26 +79,29 @@ Route::middleware('auth')->group(function () {
         Route::patch('/create-note/{id}', [SessionMeetController::class, 'storeNote'])->name('create.note');
 
         // educations
-        Route::post('/education-psycholog',[EducationController::class,'store'])->name('education.store');
-        Route::delete('/education-psycholog/{id}',[EducationController::class,'store'])->name('education.destroy');
+        Route::post('/education-psycholog', [EducationController::class, 'store'])->name('education.store');
+        Route::delete('/education-psycholog/{id}', [EducationController::class, 'store'])->name('education.destroy');
     });
 
     // 3. ROUTE KHUSUS CLIENT / USER BIASA
     Route::middleware('role:user')->group(function () {
-        Route::get('client/dashboard', [clientController::class, 'index'])->name('client.dashboard');
         Route::get('client/sessions', [clientController::class, 'sessions'])->name('client.sessions');
         Route::get('client/sessions/{code}', [clientController::class, 'SessionShow'])->name('client.sessions.show');
         Route::get('client/history', [clientController::class, 'history'])->name('client.history');
         Route::get('/bookings/checkout/{code}', [TransactionController::class, 'checkoutPage'])->name('bookings.checkout');
+
+        Route::get('/payment/success/{id}', [TransactionController::class, 'success'])->name('booking.success');
     });
 
     // 4. ROUTE CAMPURAN / SHARED (Bisa diakses semua Role asal Auth)
+    Route::get('client/dashboard', [clientController::class, 'index'])->name('client.dashboard');
+    Route::patch('/document-verified/{id}', [DocumentController::class, 'verified'])->name('document.verified');
+    Route::get('/document-show/{id}', [DocumentController::class, 'show'])->name('documents.show');
     Route::resource('reviews', ReviewController::class);
     Route::get('/payouts', [PayoutController::class, 'index'])->name('payouts.index');
     Route::get('/payouts/{id}', [PayoutController::class, 'show'])->name('payouts.show');
     Route::delete('/payouts/{id}', [PayoutController::class, 'destroy'])->name('payouts.destroy');
 
-    Route::get('/payment/success/{id}', [TransactionController::class, 'success'])->name('booking.success');
 
     // register psycholog register.psychologist
     Route::get('/register/psychologist', [PsychologController::class, 'register'])->name('register.psychologist');

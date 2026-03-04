@@ -88,7 +88,7 @@
      <div>
          <p class="text-sm font-bold my-3">Pilih Tanggal Tersedia</p>
          <div class="flex items-center gap-4 overflow-x-auto pb-4 no-scrollbar">
-
+             <x-date-button />
              <button wire:click="semuaJadwal"
                  class="flex-shrink-0 flex flex-col items-center justify-center min-w-[100px] py-3 rounded-2xl border transition-all {{ $selectedDate == '' ? 'bg-orange-500 border-orange-400' : 'bg-brand-600 border-brand-300' }}">
                  <span class="text-sm font-black text-white">Semua</span>
@@ -96,12 +96,10 @@
              </button>
 
              {{-- Bagian Loop Tanggal --}}
-             @for ($i = 0; $i < 7; $i++)
+             @for ($i = 0; $i < $viewDaysCount; $i++)
                  @php
-                     $date = now()->addDays($i);
+                     $date = $viewStartDate->copy()->addDays($i);
                      $dateValue = $date->format('Y-m-d');
-
-                     // Cek Nama Hari (format English untuk dicocokkan dengan Enum DB)
                      $dayName = strtolower($date->format('l'));
 
                      $isWorkingDay = in_array($dayName, $workingDays);
@@ -110,11 +108,12 @@
                      $isActive = $selectedDate == $dateValue;
                  @endphp
 
-                 <button wire:click="$set('selectedDate', '{{ $dateValue }}')" type="button"
+                 <button wire:key="date-select-{{ $dateValue }}"
+                     wire:click="$set('selectedDate', '{{ $dateValue }}')" type="button"
                      {{ $isDisabled ? 'disabled' : '' }}
                      class="flex-shrink-0 flex flex-col items-center justify-center min-w-[85px] h-20 rounded-2xl border-2 transition-all relative
-        {{ $isDisabled ? 'opacity-30 cursor-not-allowed bg-gray-900 border-gray-800' : '' }}
-        {{ $isActive && !$isDisabled ? 'border-orange-500 bg-brand-800 shadow-lg shadow-orange-900/40' : 'border-brand-700 bg-brand-800/50' }}">
+            {{ $isDisabled ? 'opacity-30 cursor-not-allowed bg-gray-900 border-gray-800' : '' }}
+            {{ $isActive && !$isDisabled ? 'border-orange-500 bg-brand-800 shadow-lg shadow-orange-900/40' : 'border-brand-700 bg-brand-800/50' }}">
 
                      <span
                          class="text-[10px] font-bold uppercase {{ $isActive ? 'text-orange-500' : 'text-brand-400' }}">
@@ -125,7 +124,10 @@
                          {{ $date->format('d') }}
                      </span>
 
-
+                     {{-- Label Status (Opsional) --}}
+                     @if ($isFull)
+                         <span class="absolute top-1 right-1 text-[8px] bg-red-600 text-white px-1 rounded">FULL</span>
+                     @endif
                  </button>
              @endfor
          </div>

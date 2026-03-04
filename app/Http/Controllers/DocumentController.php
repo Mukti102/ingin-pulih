@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\VerifyDocumentMail;
 use App\Models\Psycholog;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class DocumentController extends Controller
 {
@@ -29,7 +31,7 @@ class DocumentController extends Controller
     {
         try {
             $id = decrypt($id);
-            $psycholog = Psycholog::find($id);
+            $psycholog = Psycholog::with('user','document')->find($id);
 
             $document = $psycholog->document;
 
@@ -41,18 +43,16 @@ class DocumentController extends Controller
                 $document->verified_by = Auth::user()->id;
             }
 
-
-
-
             if ($psycholog->is_verified && $document->is_verified) {
                 $psycholog->verification_status = 'complete';
                 $psycholog->save();
             }
 
-
-
             $document->note = $request->note;
             $document->save();
+
+            // send email
+            Mail::to($psycholog->user->email)->queue(new VerifyDocumentMail($psycholog,$document->is_verified ? 'complete' : 'failed'));
             toast('Berhasil Menverifikasi Document', 'success');
             return redirect()->back();
         } catch (Exception $th) {

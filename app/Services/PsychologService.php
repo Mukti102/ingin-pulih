@@ -2,9 +2,14 @@
 
 namespace App\Services;
 
+use App\Mail\NewPsychologToAdminMail;
+use App\Mail\PsychologVerifiedMail;
+use App\Mail\RequestPayoutMail;
 use App\Models\Psycholog;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class PsychologService
@@ -54,7 +59,7 @@ class PsychologService
     {
         $id = decrypt($encryptedId);
 
-        $psycholog = Psycholog::with('document')->findOrFail($id);
+        $psycholog = Psycholog::with('document', 'user')->findOrFail($id);
 
         // toggle status
         $psycholog->is_verified = !$psycholog->is_verified;
@@ -62,9 +67,13 @@ class PsychologService
         $isDocumentVerified = optional($psycholog->document)->is_verified ?? false;
 
         if ($psycholog->is_verified && $isDocumentVerified) {
+            $psycholog->user->assignRole('psycholog');
             $psycholog->verification_status = 'complete';
+            Mail::to($psycholog->user->email)->queue(new PsychologVerifiedMail($psycholog->user, 'success'));
         } else {
+            $psycholog->user->assignRole('user');
             $psycholog->verification_status = 'pending';
+            Mail::to($psycholog->user->email)->queue(new PsychologVerifiedMail($psycholog->user, 'failed'));
         }
 
         $psycholog->save();
@@ -99,6 +108,12 @@ class PsychologService
             // 4. Sync Topics
             if (!empty($topics)) {
                 $psycholog->topics()->sync($topics);
+            }
+
+            $admins = User::withRole('admin')->get();
+
+            foreach ($admins as $admin) {
+                Mail::to($admin->email)->queue(new NewPsychologToAdminMail($psycholog));
             }
 
             return $psycholog;

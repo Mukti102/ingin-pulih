@@ -126,7 +126,7 @@
         <div class="col-md-4">
             <div class="card card-round">
                 <div class="card-header">
-                    <div class="card-title">Perlu Konfirmasi</div>
+                    <div class="card-title">Menunggu Pembayaran</div>
                 </div>
                 <div class="card-body">
                     @forelse($pendingBookings as $item)
@@ -141,7 +141,8 @@
                                 <span class="text-muted small">{{ $item->code }}</span>
                             </div>
                             <div class="float-end pt-1">
-                                <a href="" class="btn btn-icon btn-primary btn-round btn-sm">
+                                <a href="{{ route('bookings.show', encrypt($item->id)) }}"
+                                    class="btn btn-icon btn-primary btn-round btn-sm">
                                     <i class="fa fa-chevron-right"></i>
                                 </a>
                             </div>

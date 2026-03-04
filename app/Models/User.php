@@ -44,9 +44,22 @@ class User extends Authenticatable
     }
 
 
+    // Di dalam class User
+    public function assignRole(string $roleName)
+    {
+        $role = Role::where('name', $roleName)->first();
+        if ($role) {
+            $this->roles()->sync([$role->id]);
+        }
+    }
+
     public function isPsycholog(): bool
     {
         return $this->hasRole('psycholog');
+    }
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
     }
 
     public function getPsychologOrFail()
